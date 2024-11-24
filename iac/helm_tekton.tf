@@ -43,7 +43,7 @@ resource "kubectl_manifest" "tekton-github-pat" {
 
 
 data "template_file" "kaniko_docker_credentials" {
-  template = "${file("helm_tekton/kaniko-docker-credential.json.tpl")}"
+  template = file("helm_tekton/kaniko-docker-credential.json.tpl")
   vars = {
     "prefix" : "${var.prefix}"
     "domain" : "${var.domain}"

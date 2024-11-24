@@ -84,3 +84,11 @@ variable "jenkins_pwd" {
 variable "sonarqube_pwd" {
   default = "admin"
 }
+
+# -- Bcrypt hashed admin password
+## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+variable "argocd_pwd" {
+  # admin
+  default = "yB2XRMWBLSF1Yk2RzuLu.PjqY1ADJLGs0VCavou.QkmC6XgWVANC%"
+}
