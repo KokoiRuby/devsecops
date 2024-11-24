@@ -1,5 +1,7 @@
 externalURL: https://harbor.${prefix}.${domain}
 
+harborAdminPassword: ${harbor_pwd}
+
 expose:
   type: ingress
   tls:

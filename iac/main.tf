@@ -46,5 +46,16 @@ module "cloudflare" {
   domain               = var.domain
   prefix               = var.prefix
   ip                   = module.cvm.public_ip
-  records              = ["harbor", "jenkins"]
+  records              = ["harbor", "jenkins", "sonarqube"]
+}
+
+## helm & kubectl ##
+provider "helm" {
+  kubernetes {
+    config_path = local_file.kubeconfig.filename
+  }
+}
+
+provider "kubectl" {
+  config_path = local_file.kubeconfig.filename
 }

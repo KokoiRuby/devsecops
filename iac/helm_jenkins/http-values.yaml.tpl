@@ -7,7 +7,7 @@ controller:
     hostName: jenkins.${prefix}.${domain}
     ingressClassName: nginx
   admin:
-    password: "admin"
+    password: ${jenkins_pwd}
   # https://plugins.jenkins.io/
   installPlugins:
     - kubernetes:4296.v20a_7e4d77cf6

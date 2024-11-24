@@ -55,6 +55,7 @@ variable "ip" {
   default = ""
 }
 
+# *.prefix.domain
 variable "records" {
   default = []
 }
@@ -68,4 +69,18 @@ variable "github_username" {
 # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 variable "github_pat" {
   default = ""
+}
+
+
+## pwd ##
+variable "harbor_pwd" {
+  default = "admin"
+}
+
+variable "jenkins_pwd" {
+  default = "admin"
+}
+
+variable "sonarqube_pwd" {
+  default = "admin"
 }

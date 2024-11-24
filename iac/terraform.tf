@@ -15,6 +15,10 @@ terraform {
       source  = "tencentcloudstack/tencentcloud"
       version = "1.81.140"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.16.1"
+    }
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
