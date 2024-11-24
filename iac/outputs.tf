@@ -17,3 +17,7 @@ output "harbor_http" {
 output "harbor_https" {
   value = "https://harbor.${var.prefix}.${var.domain}"
 }
+
+output "jenkins_http" {
+  value = "http://jenkins.${var.prefix}.${var.domain}"
+}

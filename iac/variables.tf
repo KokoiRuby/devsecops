@@ -38,6 +38,10 @@ variable "cloudflare_api_token" {
   default = ""
 }
 
+variable "cloudflare_email" {
+  default = "hironwayj@gmail.com"
+}
+
 # free domain in https://register.us.kg/
 variable "domain" {
   default = ""
@@ -55,3 +59,13 @@ variable "records" {
   default = []
 }
 
+
+## github ##
+variable "github_username" {
+  default = ""
+}
+
+# https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+variable "github_pat" {
+  default = ""
+}
