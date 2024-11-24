@@ -25,3 +25,11 @@ output "jenkins_http" {
 # output "jenkins_https" {
 #   value = "https://jenkins.${var.prefix}.${var.domain}"
 # }
+
+output "sonarqube_http" {
+  value = "http://sonarqube.${var.prefix}.${var.domain}"
+}
+
+# output "jenkins_https" {
+#   value = "https://jenkins.${var.prefix}.${var.domain}"
+# }
