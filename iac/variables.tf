@@ -34,7 +34,7 @@ variable "server_name" {
 # https://developers.cloudflare.com/fundamentals/api/get-started/create-token/
 # Permission:     Zone/Zone/Read, Zone/DNS/Edit
 # Zone Resources: Include/All zones
-variable "cloudflare_api_key" {
+variable "cloudflare_api_token" {
   default = ""
 }
 

@@ -34,17 +34,19 @@ module "k3s" {
 resource "local_file" "kubeconfig" {
   content  = module.k3s.kube_config
   filename = "${path.module}/config.yaml"
+
+  depends_on = [module.k3s]
 }
 
 ## cloudflare ##
 # record[].prefix.domain
 module "cloudflare" {
-  source             = "./module/cloudflare"
-  cloudflare_api_key = var.cloudflare_api_key
-  domain             = var.domain
-  prefix             = var.prefix
-  ip                 = module.cvm.public_ip
-  records            = ["harbor"]
+  source               = "./module/cloudflare"
+  cloudflare_api_token = var.cloudflare_api_token
+  domain               = var.domain
+  prefix               = var.prefix
+  ip                   = module.cvm.public_ip
+  records              = ["harbor"]
 }
 
 ## helm ##
@@ -64,6 +66,48 @@ resource "helm_release" "ingress-nginx" {
   create_namespace = true
 }
 
+# https://cert-manager.io/docs/installation/helm/
+# https://cert-manager.io/docs/usage/ingress/#optional-configuration
+resource "helm_release" "cert-manager" {
+  name             = "cert-manager"
+  repository       = "https://charts.jetstack.io"
+  chart            = "cert-manager"
+  namespace        = "cert-manager"
+  version          = "v1.16.2"
+  create_namespace = true
+  set {
+    name  = "crds.enabled"
+    value = true
+  }
+  set {
+    name  = "ingressShim.defaultIssuerName"
+    value = "lets-encrypt"
+  }
+  set {
+    name  = "ingressShim.defaultIssuerKind"
+    value = "ClusterIssuer"
+  }
+  set {
+    name  = "ingressShim.defaultIssuerGroup"
+    value = "cert-manager.io"
+  }
+}
+
+
+# https://github.com/bitnami-labs/sealed-secrets?tab=readme-ov-file#helm-chart
+resource "helm_release" "sealed-secrets" {
+  name             = "sealed-secrets"
+  repository       = "https://bitnami-labs.github.io/sealed-secrets"
+  chart            = "sealed-secrets"
+  namespace        = "kube-system"
+  version          = "v2.16.2"
+  create_namespace = false
+  set {
+    name  = "fullnameOverride"
+    value = "sealed-secrets-controller"
+  }
+}
+
 # https://goharbor.io/docs/2.0.0/install-config/harbor-ha-helm/
 resource "helm_release" "harbor" {
   name             = "harbor"
@@ -75,7 +119,7 @@ resource "helm_release" "harbor" {
 
   values = [
     "${templatefile(
-      "./helm_harbor/values.yaml.tpl",
+      "./helm_harbor/https-values.yaml.tpl",
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"

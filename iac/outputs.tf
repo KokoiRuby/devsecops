@@ -9,3 +9,11 @@ output "cmv_ssh_cmd" {
 output "export_kubeconfig_cmd" {
   value = "export KUBECONFIG=./config.yaml"
 }
+
+output "harbor_http" {
+  value = "http://harbor.${var.prefix}.${var.domain}"
+}
+
+output "harbor_https" {
+  value = "https://harbor.${var.prefix}.${var.domain}"
+}

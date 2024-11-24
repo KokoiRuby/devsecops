@@ -5,12 +5,11 @@ expose:
   tls:
     enabled: true
     certSource: auto
-    commonName: ""
   ingress:
     hosts:
       core: harbor.${prefix}.${domain}
     className: "nginx"
-    # annotations:
+    annotations:
       # cert-manager
-      # kubernetes.io/tls-acme: "true"
-      # certmanager.k8s.io/issuer: letsencrypt
+      kubernetes.io/tls-acme: "true"
+      certmanager.k8s.io/cluster-issuer: lets-encrypt
