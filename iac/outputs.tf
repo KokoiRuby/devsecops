@@ -30,6 +30,22 @@ output "sonarqube_http" {
   value = "http://sonarqube.${var.prefix}.${var.domain}"
 }
 
-# output "jenkins_https" {
-#   value = "https://jenkins.${var.prefix}.${var.domain}"
+# output "sonarqube_https" {
+#   value = "https://sonarqube.${var.prefix}.${var.domain}"
+# }
+
+output "tekton_http" {
+  value = "http://tekton.${var.prefix}.${var.domain}"
+}
+
+# output "tekton_https" {
+#   value = "https://tekton.${var.prefix}.${var.domain}"
+# }
+
+output "argocd_http" {
+  value = "http://argocd.${var.prefix}.${var.domain}"
+}
+
+# output "sonarqube_https" {
+#   value = "https://argocd.${var.prefix}.${var.domain}"
 # }
