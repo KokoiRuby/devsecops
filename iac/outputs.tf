@@ -3,7 +3,7 @@ output "cvm_public_ip" {
 }
 
 output "cmv_ssh_cmd" {
-  value = "sshpass -p ${var.password} ubuntu@${module.cvm.public_ip}"
+  value = "ssh ubuntu@${module.cvm.public_ip} (pwd: ${var.password})"
 }
 
 output "export_kubeconfig_cmd" {

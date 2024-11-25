@@ -54,16 +54,18 @@ resource "kubectl_manifest" "tekton-github-pat" {
 resource "local_file" "render_kaniko_docker_credentials_json" {
   filename = "/tmp/rendered_kaniko_docker_credentials.json"
   content = templatefile("helm_tekton/kaniko-docker-credential.json.tpl",
-      {
-        "prefix" : "${var.prefix}"
-        "domain" : "${var.domain}"
-        "harbor_pwd" : "${var.harbor_pwd}"
-        "harbor_pwd_base64" : "${base64encode("${var.harbor_pwd}")}"
-    })
+    {
+      "prefix" : "${var.prefix}"
+      "domain" : "${var.domain}"
+      "harbor_pwd" : "${var.harbor_pwd}"
+      "harbor_pwd_base64" : "${base64encode("${var.harbor_pwd}")}"
+  })
 }
 
 resource "null_resource" "create_kaniko_docker_credentials_secret" {
   provisioner "local-exec" {
     command = "kubectl create secret generic kaniko-docker-credentials --from-file=config.json=${local_file.render_kaniko_docker_credentials_json.filename} --dry-run=client -o yaml | kubectl --kubeconfig=config.yaml apply -f -"
   }
+
+  depends_on = [local_file.kubeconfig]
 }

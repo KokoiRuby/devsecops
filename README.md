@@ -1,33 +1,108 @@
 ## DevSecOps
 
-### Prerequisite
+A "one-click-to-start" CI/CD pipeline powered by [Terraform](https://www.terraform.io/) & [Tecent Cloud](https://cloud.tencent.com/?mobile&lang=en).
+
+:smile: **This project is in progress, we would appreciate your precious ideas & suggestions to make it better.**
+
+### **Disclaimer**
+
+**You may incur some charges by setting up this pipeline, proceed with caution should you have any concerns.** :pray:
+
+### **Content Removal Declaration**
+
+If any content on this platform infringes upon your rights or intellectual property, please notify us immediately. We are committed to respecting all legal rights and will promptly remove any infringing material upon verification. Please contact us with the relevant details, and we will address the issue as soon as possible.
+
+### Features
+
+### Limitation
+
+- Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
+
+### Architecture
 
 
 
 ### Deploy
 
+#### Env
+
+Host: Windows11-v23H2 + [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)-Ubuntu-22.04 + [Docker Desktop](https://www.docker.com/products/docker-desktop/) v4.28.0
+
+#### Command line tool
+
+Note: some of these are not necessary but you would need them anyway if you want to go through the entire workflow.
+
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/)
+- [helm](https://helm.sh/docs/intro/install/)
+- [terraform](https://developer.hashicorp.com/terraform/install)
+- [kubeseal](https://github.com/bitnami-labs/sealed-secrets?tab=readme-ov-file#kubeseal)
+
+#### Setup
+
+Export env for Tencent Cloud [access credentials](https://www.tencentcloud.com/document/product/598/32675). 
+
+It's recommended to add them into your shell configuration file, for example `~/.zshrc`.
+
 ```bash
-cd iac && terraform apply
+export TF_VAR_secret_id="..."
+export TF_VAR_secret_key=".."
 ```
 
-
-
-
-
-
+Create a file named `terraform.tfvars` locally to store your sensitive data.
 
 ```bash
-# env
+cd iac
+touch terraform.tfvars
+```
+
+```bash
+# terraform.tfvars
+
+# cloudflare
+# free domain in https://register.us.kg/
+domain               = "..."
+
+# https://dash.cloudflare.com/
+# https://developers.cloudflare.com/fundamentals/api/get-started/create-token/
+# Permission:     Zone/Zone/Read, Zone/DNS/Edit
+# Zone Resources: Include/All zones
+cloudflare_api_token = "..."
+
+# github
+github_username      = "..."
+
+# # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+github_pat           = "..."
+```
+
+Note: feel free to customize any variables in `variables.tf` or/and files under `module/` directory to build your own Terraform project.
+
+#### Apply
+
+```bash
+# need approval
+terraform apply
+
+# or auto
+terraform apply --auto-approve
+```
+
+#### Verify
+
+```bash
+# export env in a single terminal
 export KUBECONFIG=./config.yaml
-```
 
-### Sonarqube
+# list namespaces
+kubectl get ns
+```
 
 ```bash
-kubectl apply -f helm_sonarqube/secret-sonar-token.yaml
+# get urls
+terraform output
 ```
 
-### clean-up
+#### clean-up
 
 ```bash
 terraform state rm helm_release.cert-manager
@@ -41,4 +116,27 @@ terraform state rm "module.k3s"
 terraform destroy --auto-approve
 ```
 
+### Tutorial
+
+### Q&A
+
+> Why not merge all `helm_*.tf` & `helm_*/` in a single file & directory?
+
+Simply to modul-ize and make it easy to manage rather than stuffing them into a single room. If you don't any one of modules, simply comments all lines in `helm_*.tf` file.
+
+> Why not use [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) instead of one-line `helm` command?
+
+To be honest, `helm` command is much simpler then [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release), we could even include everything into a init script & run it during the cloud vm boot-up phase. However, we'd like to stick to the mindset of "IaC" where resource as a single unit to manage. Anyway, it varies from person to person, and no matter which practice.
+
+### Contribution
+
+Geekbang DevOps Camp - [lyzhang1999](https://github.com/lyzhang1999)
+
 ### TODO
+
+sonarqube
+
+```bash
+kubectl apply -f helm_sonarqube/secret-sonar-token.yaml
+```
+

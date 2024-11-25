@@ -7,6 +7,10 @@ resource "helm_release" "sonarqube" {
   version          = "v10.7.0+3598"
   create_namespace = true
 
+  # avoid context deadline exceeded, default is 300
+  # sonarqube needs to take a bit of time to download
+  timeout = 600
+
   values = [
     "${templatefile(
       "./helm_sonarqube/http-values.yaml.tpl",
