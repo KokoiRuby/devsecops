@@ -10,7 +10,7 @@ A "one-click-to-start" CI/CD pipeline powered by [Terraform](https://www.terrafo
 
 ### **Content Removal Declaration**
 
-If any content on this platform infringes upon your rights or intellectual property, please notify us immediately. We are committed to respecting all legal rights and will promptly remove any infringing material upon verification. Please contact us with the relevant details, and we will address the issue as soon as possible.
+If any content in this project infringes upon your rights or intellectual property, please notify us immediately. We are committed to respecting all legal rights and will promptly remove any infringing material upon verification. Please contact us with the relevant details, and we will address the issue as soon as possible.
 
 ### Features
 
@@ -20,7 +20,7 @@ If any content on this platform infringes upon your rights or intellectual prope
 
 ### Architecture
 
-
+![devsecops-arch](README.assets/devsecops-arch.png)
 
 ### Deploy
 
@@ -30,7 +30,7 @@ Host: Windows11-v23H2 + [WSL2](https://learn.microsoft.com/en-us/windows/wsl/ins
 
 #### Command line tool
 
-Note: some of these are not necessary but you would need them anyway if you want to go through the entire workflow.
+Note: some of these are not necessary but you would need them anyway while you are going through the entire workflow.
 
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
 - [helm](https://helm.sh/docs/intro/install/)
@@ -45,7 +45,7 @@ It's recommended to add them into your shell configuration file, for example `~/
 
 ```bash
 export TF_VAR_secret_id="..."
-export TF_VAR_secret_key=".."
+export TF_VAR_secret_key="..."
 ```
 
 Create a file named `terraform.tfvars` locally to store your sensitive data.
@@ -122,7 +122,7 @@ terraform destroy --auto-approve
 
 > Why not merge all `helm_*.tf` & `helm_*/` in a single file & directory?
 
-Simply to modul-ize and make it easy to manage rather than stuffing them into a single room. If you don't any one of modules, simply comments all lines in `helm_*.tf` file.
+Simply to modul-ize and make it easy to manage rather than stuffing them into a single room. If you don't need any one of modules, simply comments all lines in `helm_*.tf` file.
 
 > Why not use [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) instead of one-line `helm` command?
 
