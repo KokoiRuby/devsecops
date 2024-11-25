@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: github-pat
+  name: tekton-github-pat
   namespace: default
   annotations:
     tekton.dev/git-0: https://github.com

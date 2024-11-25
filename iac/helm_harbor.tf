@@ -17,4 +17,6 @@ resource "helm_release" "harbor" {
       }
     )}"
   ]
+
+  depends_on = [helm_release.ingress-nginx]
 }

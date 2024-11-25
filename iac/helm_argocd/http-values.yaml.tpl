@@ -13,5 +13,4 @@ server:
   ingress:
     enabled: true
     ingressClassName: nginx
-    hosts:
-      - "argocd.${prefix}.${domain}"
+    hostname: "argocd.${prefix}.${domain}"

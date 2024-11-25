@@ -90,5 +90,5 @@ variable "sonarqube_pwd" {
 ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
 variable "argocd_pwd" {
   # admin
-  default = "yB2XRMWBLSF1Yk2RzuLu.PjqY1ADJLGs0VCavou.QkmC6XgWVANC%"
+  default = "$2a$10$8Qapbaym1sHCL19J6Hr/muTNhT8EdvCRjyjWR.N73j1MO.h.SyaBa"
 }

@@ -9,12 +9,14 @@ resource "helm_release" "argo-cd" {
 
   values = [
     "${templatefile(
-      "./helm_argocd/https-values.yaml.tpl",
+      "./helm_argocd/http-values.yaml.tpl",
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"
-        "argocd_pwd" : "${argocd_pwd}"
+        "argocd_pwd" : "${var.argocd_pwd}"
       }
     )}"
   ]
+
+  depends_on = [helm_release.ingress-nginx]
 }

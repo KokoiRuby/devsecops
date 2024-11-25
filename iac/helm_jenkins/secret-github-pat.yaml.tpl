@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: github-pat
+  name: jenkins-github-pat
   labels:
     "jenkins.io/credentials-type": "usernamePassword"
   annotations:
@@ -14,7 +14,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: github-pat-text
+  name: jenkins-github-pat-text
   labels:
     "jenkins.io/credentials-type": "secretText"
   annotations:

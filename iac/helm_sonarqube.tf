@@ -17,4 +17,6 @@ resource "helm_release" "sonarqube" {
       }
     )}"
   ]
+
+  depends_on = [helm_release.ingress-nginx]
 }

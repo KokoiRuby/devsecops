@@ -17,6 +17,8 @@ resource "helm_release" "jenkins" {
       }
     )}"
   ]
+
+  depends_on = [helm_release.ingress-nginx]
 }
 
 resource "kubectl_manifest" "jenkins-sa" {
