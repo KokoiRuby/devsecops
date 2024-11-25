@@ -12,15 +12,20 @@ A "one-click-to-start" CI/CD pipeline powered by [Terraform](https://www.terrafo
 
 If any content in this project infringes upon your rights or intellectual property, please notify us immediately. We are committed to respecting all legal rights and will promptly remove any infringing material upon verification. Please contact us with the relevant details, and we will address the issue as soon as possible.
 
-### Features
-
-### Limitation
-
-- Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
-
 ### Architecture
 
 ![devsecops-arch](README.assets/devsecops-arch.png)
+
+### Features
+
+Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encrypt](https://letsencrypt.org/) & [Cloudflare](https://www.cloudflare.com/).
+
+![ingress-https](README.assets/ingress-https.png)
+
+### Limitation
+
+- Currently only Harbor supports HTTPS.
+- Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
 
 ### Deploy
 
