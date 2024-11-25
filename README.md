@@ -76,7 +76,7 @@ cloudflare_api_token = "..."
 # github
 github_username      = "..."
 
-# # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+# https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 github_pat           = "..."
 ```
 
@@ -125,11 +125,11 @@ terraform destroy --auto-approve
 
 ### Q&A
 
-> Why not merge all `helm_*.tf` & `helm_*/` in a single file & directory?
+> Why not merge all `helm_*.tf` & `helm_*/` into a single file & directory?
 
 Simply to modul-ize and make it easy to manage rather than stuffing them into a single room. If you don't need any one of modules, simply comments all lines in `helm_*.tf` file.
 
-> Why not use [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) instead of one-line `helm` command?
+> Why not using one-line `helm` command instead of [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release)?
 
 To be honest, `helm` command is much simpler then [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release), we could even include everything into a init script & run it during the cloud vm boot-up phase. However, we'd like to stick to the mindset of "IaC" where resource as a single unit to manage. Anyway, it varies from person to person, and no matter which practice.
 
