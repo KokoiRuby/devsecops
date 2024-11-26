@@ -25,14 +25,6 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-resource "kubectl_manifest" "cert-manager-cluster-issuer" {
-  yaml_body = templatefile("./helm_cert_manager/cluster-issuer.yaml.tpl", {
-    "cloudflare_email" : "${var.cloudflare_email}"
-  })
-
-  depends_on = [helm_release.cert-manager]
-}
-
 # cannot use data source since the file will be created after kubeseal
 resource "null_resource" "apply_sealed_secret_cloudflare_token" {
   provisioner "local-exec" {
@@ -41,3 +33,12 @@ resource "null_resource" "apply_sealed_secret_cloudflare_token" {
 
   depends_on = [null_resource.kubeseal_cloudflare_token]
 }
+
+resource "kubectl_manifest" "cert-manager-cluster-issuer" {
+  yaml_body = templatefile("./helm_cert_manager/cluster-issuer.yaml.tpl", {
+    "cloudflare_email" : "${var.cloudflare_email}"
+  })
+
+  depends_on = [helm_release.cert-manager, null_resource.apply_sealed_secret_cloudflare_token]
+}
+

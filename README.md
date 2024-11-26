@@ -129,7 +129,7 @@ terraform destroy --auto-approve
 
 Simply to modul-ize and make it easy to manage rather than stuffing them into a single room. If you don't need any one of modules, simply comments all lines in `helm_*.tf` file.
 
-> Why not using one-line `helm` command instead of [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release)?
+> Why not use one-line `helm` command instead of [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release)?
 
 To be honest, `helm` command is much simpler then [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release), we could even include everything into a init script & run it during the cloud vm boot-up phase. However, we'd like to stick to the mindset of "IaC" where resource as a single unit to manage. Anyway, it varies from person to person, and no matter which practice.
 
