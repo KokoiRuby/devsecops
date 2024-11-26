@@ -18,7 +18,7 @@ If any content in this project infringes upon your rights or intellectual proper
 
 ### Features
 
-Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encrypt](https://letsencrypt.org/) & [Cloudflare](https://www.cloudflare.com/).
+Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encrypt](https://letsencrypt.org/) & [Cloudflare](https://www.cloudflare.com/) and [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets).
 
 ![ingress-https](README.assets/ingress-https.png)
 
@@ -27,7 +27,6 @@ Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encryp
 - Currently only Harbor supports HTTPS.
 - Let's Encrypt regulates up to 5 certificates can be issued per exact same set of hostnames every 7 days. See more in [Limit](https://letsencrypt.org/docs/rate-limits/#new-certificates-per-exact-set-of-hostnames). So please don't tear-down & re-create your pipeline frequently, or you may switch to Harbor HTTP (by default).
 - Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
-- 
 
 ### Deploy
 
@@ -87,7 +86,7 @@ Note: feel free to customize any variables in `variables.tf` or/and files under 
 If you want to enable Harbor HTTPS. Modify `helm_harbor.tf` then un-comment `helm_cert_manager.tf` & `helm_sealed_secret.tf`.
 
 ```json
-# https://goharbor.io/docs/2.0.0/install-config/harbor-ha-helm/
+// https://goharbor.io/docs/2.0.0/install-config/harbor-ha-helm/
 resource "helm_release" "harbor" {
   name             = "harbor"
   repository       = "https://helm.goharbor.io"
@@ -98,7 +97,7 @@ resource "helm_release" "harbor" {
 
   values = [
     "${templatefile(
-      "./helm_harbor/https-values.yaml.tpl",   # modify to https
+      "./helm_harbor/https-values.yaml.tpl",   // modify to https
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"
@@ -167,10 +166,4 @@ To be honest, `helm` command is much simpler then [helm_release](https://registr
 Geekbang DevOps Camp - [lyzhang1999](https://github.com/lyzhang1999)
 
 ### TODO
-
-sonarqube
-
-```bash
-kubectl apply -f helm_sonarqube/secret-sonar-token.yaml
-```
 

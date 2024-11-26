@@ -1,0 +1,61 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="第 1 页" id="Wmf8Lm30b222qT7Vr76U">
+    <mxGraphModel dx="1728" dy="998" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-1" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github" vertex="1" parent="1">
+          <mxGeometry x="423.07" y="439" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.jenkins.io/images/logos/jenkins/jenkins.svg;" vertex="1" parent="1">
+          <mxGeometry x="423.07" y="579.52" width="71.33" height="98.48" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.linuxfoundation.jp/wp-content/uploads/2019/04/tekton-color.svg;" vertex="1" parent="1">
+          <mxGeometry x="374" y="731" width="173.13" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-5" value="Trigger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcc99;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="608.0699999999999" y="314" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-6" value="Pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcc99;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="854.0699999999999" y="314" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-7" value="Step" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcc99;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="1093.07" y="314" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-8" value="on: push, pull_request..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="595.0699999999999" y="444" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-10" value="Pull: scan periodically" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="595.0699999999999" y="556" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-11" value="Push: Webhook" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="595.0699999999999" y="627" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-12" value="EventListener CRD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="595.0699999999999" y="722" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-13" value="TriggerTemplate CRD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="595.0699999999999" y="795" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-14" value="jobs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="841.0699999999999" y="444" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-15" value="Jenkinsfile&lt;br&gt;Pipeline" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="841.0699999999999" y="590" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-16" value="Pipeline CRD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="841.0699999999999" y="754" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-18" value="Steps" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="1080.07" y="443.76" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-19" value="Jenkinsfile&lt;br&gt;Stage" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="1080.07" y="589.76" width="146" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zYFo8VWhJopRHxQe0DvD-20" value="Task CRD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="1080.07" y="753.76" width="146" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

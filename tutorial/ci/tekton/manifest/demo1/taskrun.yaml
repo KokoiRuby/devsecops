@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: git-clone
+spec:
+  serviceAccountName: tekton-build-bot
+  taskRef:
+    name: git-clone
+  params:
+    - name: url
+      value: "https://github.com/KokoiRuby/devsecops-demo-app.git"
+  workspaces:
+    - emptyDir: {}
+      name: output
