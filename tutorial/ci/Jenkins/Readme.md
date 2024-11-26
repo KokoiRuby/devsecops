@@ -729,8 +729,110 @@ It helps developers manage code quality and security continuously by providing d
 
 ![SQ instance components](https://assets-eu-01.kc-usercontent.com/de54acbd-b859-01c0-a8dc-f4339e0550f4/0fd3b035-aee8-4039-8a76-f77e93a2b11d/SQ-instance-components.png?w=924&h=451&auto=format&fit=crop)
 
-Create a project.
+Create a local project for each service.
+
+![image-20241126183232185](Readme.assets/image-20241126183232185.png)
+
+![image-20241126183320277](Readme.assets/image-20241126183320277.png)
+
+![image-20241126183335091](Readme.assets/image-20241126183335091.png)
 
 
 
-### HA
+Create user token.
+
+![image-20241126183707884](Readme.assets/image-20241126183707884.png)
+
+![image-20241126183802716](Readme.assets/image-20241126183802716.png)
+
+Populate token & create user token secret.
+
+```bash
+export KUBECONFIG=./config.yaml
+kubectl apply -f helm_sonarqube/secret-sonar-token.yaml
+```
+
+Back to Jenkins Dashboard.
+
+![image-20241126184043929](Readme.assets/image-20241126184043929.png)
+
+**Note: no `/` in Server URL.**
+
+![image-20241126184421784](Readme.assets/image-20241126184421784.png)
+
+Update `Jenkinsfile` under each service directory. Pay attention to projectKey in `SONAR_SCANNER_OPTS`.
+
+```groovy
+stage('Scan Code with Sonarqube') {
+    when {
+        changeset "**/bar/**"
+    }
+    agent {
+        kubernetes {
+            defaultContainer 'sonar-scanner'
+            yaml """
+kind: Pod
+spec:
+  containers:
+  - name: sonar-scanner
+    image: sonarsource/sonar-scanner-cli:11.1
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+"""
+        }
+    }
+
+    environment {
+        HARBOR_URL = credentials('harbor-url')
+        SONAR_TOKEN = credentials('sonarqube-token')
+        SONAR_SCANNER_OPTS = "-Dsonar.projectKey=devsecops-demo-app-bar -Dsonar.token=${SONAR_TOKEN}"
+        SONAR_HOST_URL = "http://sonar${HARBOR_URL.replaceAll('harbor', '')}."
+    }
+
+    steps {
+        container(name: 'sonar-scanner', shell: '/bin/sh') {
+            withSonarQubeEnv('SonarQube') {
+                sh '''#!/bin/sh
+                    cd bar
+                    sonar-scanner
+                '''
+            }
+            timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+}
+
+```
+
+Modify source `foo/templates/index.html` & `bar/templates/index.html`.
+
+```bash
+<div class="version-info">v0.1.5</div>
+```
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "jenkins sonarqube build v0.1.5"
+git push -u origin main
+```
+
+Check scan result.
+
+![image-20241126191346381](Readme.assets/image-20241126191346381.png)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+### [HA](https://community.jenkins.io/t/jenkins-high-availablity/9060)

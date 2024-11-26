@@ -28,8 +28,6 @@ data "kubectl_file_documents" "jenkins-sa" {
 resource "kubectl_manifest" "jenkins-sa" {
   for_each  = data.kubectl_file_documents.jenkins-sa.manifests
   yaml_body = each.value
-
-  depends_on = [helm_release.jenkins]
 }
 
 resource "kubectl_manifest" "jenkins-harbor-url" {

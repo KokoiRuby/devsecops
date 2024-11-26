@@ -10,13 +10,13 @@ output "export_kubeconfig_cmd" {
   value = "export KUBECONFIG=./config.yaml"
 }
 
-# output "harbor_http" {
-#   value = "http://harbor.${var.prefix}.${var.domain}"
-# }
-
-output "harbor_https" {
-  value = "https://harbor.${var.prefix}.${var.domain}"
+output "harbor_http" {
+  value = "http://harbor.${var.prefix}.${var.domain}"
 }
+
+# output "harbor_https" {
+#   value = "https://harbor.${var.prefix}.${var.domain}"
+# }
 
 output "jenkins_http" {
   value = "http://jenkins.${var.prefix}.${var.domain}"

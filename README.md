@@ -25,7 +25,7 @@ Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encryp
 ### Limitation
 
 - Currently only Harbor supports HTTPS.
-- Let's Encrypt regulates up to 5 certificates can be issued per exact same set of hostnames every 7 days. See more in [Limit](https://letsencrypt.org/docs/rate-limits/#new-certificates-per-exact-set-of-hostnames). So please don't tear-down & re-create your pipeline frequently, or you may switch to Harbor HTTP.
+- Let's Encrypt regulates up to 5 certificates can be issued per exact same set of hostnames every 7 days. See more in [Limit](https://letsencrypt.org/docs/rate-limits/#new-certificates-per-exact-set-of-hostnames). So please don't tear-down & re-create your pipeline frequently, or you may switch to Harbor HTTP (by default).
 - Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
 - 
 
@@ -83,6 +83,33 @@ github_pat           = "..."
 ```
 
 Note: feel free to customize any variables in `variables.tf` or/and files under `module/` directory to build your own Terraform project.
+
+If you want to enable Harbor HTTPS. Modify `helm_harbor.tf` then un-comment `helm_cert_manager.tf` & `helm_sealed_secret.tf`.
+
+```json
+# https://goharbor.io/docs/2.0.0/install-config/harbor-ha-helm/
+resource "helm_release" "harbor" {
+  name             = "harbor"
+  repository       = "https://helm.goharbor.io"
+  chart            = "harbor"
+  namespace        = "harbor"
+  version          = "v1.16.0"
+  create_namespace = true
+
+  values = [
+    "${templatefile(
+      "./helm_harbor/https-values.yaml.tpl",   # modify to https
+      {
+        "prefix" : "${var.prefix}"
+        "domain" : "${var.domain}"
+        "harbor_pwd" : "${var.harbor_pwd}"
+      }
+    )}"
+  ]
+
+  depends_on = [helm_release.ingress-nginx]
+}
+```
 
 #### Apply
 
