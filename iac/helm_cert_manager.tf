@@ -31,7 +31,7 @@ resource "null_resource" "apply_sealed_secret_cloudflare_token" {
     command = "kubectl apply -f helm_cert_manager/sealed-secret-cloudflare-token.yaml --kubeconfig=config.yaml"
   }
 
-  depends_on = [null_resource.kubeseal_cloudflare_token]
+  depends_on = [helm_release.cert-manager, null_resource.kubeseal_cloudflare_token]
 }
 
 resource "kubectl_manifest" "cert-manager-cluster-issuer" {
@@ -39,6 +39,6 @@ resource "kubectl_manifest" "cert-manager-cluster-issuer" {
     "cloudflare_email" : "${var.cloudflare_email}"
   })
 
-  depends_on = [helm_release.cert-manager, null_resource.apply_sealed_secret_cloudflare_token]
+  depends_on = [null_resource.apply_sealed_secret_cloudflare_token]
 }
 

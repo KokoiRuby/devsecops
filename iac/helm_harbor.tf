@@ -9,7 +9,7 @@ resource "helm_release" "harbor" {
 
   values = [
     "${templatefile(
-      "./helm_harbor/https-values.yaml.tpl",
+      "./helm_harbor/http-values.yaml.tpl",
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"

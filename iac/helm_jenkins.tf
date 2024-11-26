@@ -22,7 +22,7 @@ resource "helm_release" "jenkins" {
 }
 
 data "kubectl_file_documents" "jenkins-sa" {
-    content = file("./helm_jenkins/serviceaccount.yaml")
+  content = file("./helm_jenkins/serviceaccount.yaml")
 }
 
 resource "kubectl_manifest" "jenkins-sa" {
@@ -41,11 +41,16 @@ resource "kubectl_manifest" "jenkins-harbor-url" {
   depends_on = [helm_release.jenkins]
 }
 
-resource "kubectl_manifest" "jenkins-github-pat" {
-  yaml_body = templatefile("./helm_jenkins/secret-github-pat.yaml.tpl", {
+data "kubectl_file_documents" "jenkins-github-pat" {
+  content = templatefile("./helm_jenkins/secret-github-pat.yaml.tpl", {
     "github_username" : "${var.github_username}"
     "github_pat" : "${var.github_pat}"
   })
+}
+
+resource "kubectl_manifest" "jenkins-github-pat" {
+  for_each  = data.kubectl_file_documents.jenkins-github-pat.manifests
+  yaml_body = each.value
 
   depends_on = [helm_release.jenkins]
 }

@@ -38,15 +38,11 @@ It **doesn't depend on a Docker daemon** and executes each command within a Dock
 
 ### Build
 
-![mono-repo-2](Readme.assets/mono-repo-2.png)
-
 ![mono-repo-3](Readme.assets/mono-repo-3.png)
 
 ![mono-repo-4](Readme.assets/mono-repo-4.png)
 
 ### Hands-on
-
-> 
 
 > Demo App GitHub [repository](https://github.com/KokoiRuby/devsecops-demo-app)
 
@@ -61,6 +57,7 @@ kubectl get secret harbor-pullsecret -n jenkins -o yaml
 # git checkout
 # https://jenkinsci.github.io/kubernetes-credentials-provider-plugin/
 kubectl get secret jenkins-github-pat -n default -o yaml
+kubectl get secret jenkins-github-pat-text -n default -o yaml
 ```
 
 ```bash
@@ -176,11 +173,11 @@ Select "GitHub" as branch source.
 
 ![image-20241126110435128](Readme.assets/image-20241126110435128.png)
 
-Select GitHub Credentials & fill in Repository HTTPS URL.
+Select "GitHub Credentials" & fill in "Repository HTTPS URL".
 
 ![image-20241126112126727](Readme.assets/image-20241126112126727.png)
 
-Update Script Path.
+Update "Script Path".
 
 ![image-20241126112454833](Readme.assets/image-20241126112454833.png)
 
@@ -192,20 +189,76 @@ Verify
 
 ![image-20241126112853395](Readme.assets/image-20241126112853395.png)
 
+Built & pushed successfully.
+
 ![image-20241126113113522](Readme.assets/image-20241126113113522.png)
 
 ![image-20241126113133386](Readme.assets/image-20241126113133386.png)
 
 ![image-20241126113235210](Readme.assets/image-20241126113235210.png)
 
-```bash
-# rollback
+Instead, we could switch to "Push" mode, which means the pipeline will be triggered whenever commit on GitHub Repo. Disable scan first.
 
+![image-20241126133328466](Readme.assets/image-20241126133328466.png)
+
+"Manage Jenkins" 👉 "System"
+
+![image-20241126133622848](Readme.assets/image-20241126133622848.png)
+
+"Add GitHub Server"
+
+![image-20241126133828018](Readme.assets/image-20241126133828018.png)
+
+![image-20241126134907680](Readme.assets/image-20241126134907680.png)
+
+Get Hook URL
+
+![image-20241126134936858](Readme.assets/image-20241126134936858.png)
+
+Back to GitHub repository 👉 "Setting" 👉 "Webhooks". Note: MFA is required.
+
+![image-20241126135101782](Readme.assets/image-20241126135101782.png)
+
+![image-20241126135352504](Readme.assets/image-20241126135352504.png)
+
+"Ping" successfully.
+
+![image-20241126135441324](Readme.assets/image-20241126135441324.png)
+
+Trigger an empty commit.
+
+```bash
+git commit --allow-empty -m "test jenkins webhook"
+git push -u origin main
 ```
 
+Built & pushed successfully.
 
+![image-20241126140125040](Readme.assets/image-20241126140125040.png)
+
+![image-20241126140145567](Readme.assets/image-20241126140145567.png)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
 
 ### Monorepo#2
+
+![mono-repo-2](Readme.assets/mono-repo-2.png)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -215,21 +268,6 @@ Verify
 
 #### Practice
 
-- New item → **Multi-branch pipeline**
-  - Branch Sources → "GitHub"
-    - Credentials: GitHub personal access token (pat) in kubernetes secret
-    - Repository HTTPS URL
-    - Build Configuration
-      - Script Path - `svc-*/Jenkinsfile`
-    - `"Pull"` (from repository) → enable "Periodically if otherwise run" given an interval
-- `"Push"` (repositry to Jenkins) - **Plugin(s) is(are) required**
-  - Manage Jenkins → "System" → GitHub Server
-    - Name
-    - API URL
-    - Credentials: GitHub personal access token (pat) in kubernetes secret
-  - Back to GitHub repository → "Settings" → "Webhooks"
-    - Payload URL
-    - Content type: application/json
 - On-demand build
   - [`when {}`](https://www.jenkins.io/doc/book/pipeline/syntax/#when) + changeset
   - Merge steps in `./svc-*/Jenkinsfile` into `./Jenkinsfile` = One pipeline
