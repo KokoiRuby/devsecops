@@ -14,8 +14,8 @@ module "cvm" {
   vpc_id            = module.vpc.vpc_id
   subnet_id         = module.vpc.subnet_id
   sg_id             = module.vpc.sg_id
-  cpu               = 4
-  memory            = 8
+  cpu               = 8
+  memory            = 16
   region            = var.region
   availability_zone = var.availability-zone
   password          = var.password

@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages{
+        stage('Create MultiBranchPipelineJob'){
+            steps{
+                script{
+                    // scan Jenkinsfile from all directories
+                    def files = findFiles(glob: '**/Jenkinsfile')
+                    def fileCount = files.size()
+                    echo "Found ${fileCount} Jenkinsfile(s)"
+                    for (int i = 0; i < files.size(); i++) {
+                        echo files[i].name
+                        def filePath = files[i].path
+                        def pathWithoutFile = filePath.replace('/Jenkinsfile', '')
+                        def jobName = "auto-gen-" + ( pathWithoutFile =~ /([^\/]+)\/?$/)[0][0]
+                        echo filePath
+                        echo jobName
+                        if(Jenkins.instance.getItemMap()[jobName] == null){
+                            echo "Job ${jobName} does not exist, creating..."
+                            // create MultiBranchPipelineJob for each directory which contains Jenkinsfile
+                            createJob(filePath, jobName)
+                        }else{
+                            echo "Job ${jobName} already exists."
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+def createJob(filePath, jobName){
+        jobDsl  targets: '*.groovy',
+        removedJobAction: 'IGNORE',
+        removedViewAction: 'IGNORE',
+        lookupStrategy: 'JENKINS_ROOT',
+        additionalParameters: [jenkinsfile: filePath, Name: jobName]
+}

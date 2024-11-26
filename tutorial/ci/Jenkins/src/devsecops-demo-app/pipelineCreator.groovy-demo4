@@ -1,0 +1,31 @@
+// get all DSL config http://jenkins.wangwei.devopscamp.us/plugin/job-dsl/api-viewer/index.html
+multibranchPipelineJob("${Name}") {
+    branchSources {
+        branchSource {
+            source {
+                github {
+                    id('github')
+                    repoOwner("KokoiRuby")
+                    configuredByUrl(false)
+                    repository("devsecops-demo-app")
+                    repositoryUrl("https://github.com/KokoiRuby/devsecops-demo-app.git")
+                    credentialsId('jenkins-github-pat')
+
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(2)
+                        }
+                    }
+                }
+            }
+        }
+        factory {
+            workflowBranchProjectFactory {
+                scriptPath("${jenkinsfile}")
+            }
+        }
+    }
+}

@@ -66,7 +66,7 @@ kubectl get secret harbor-url -n jenkins -o yaml
 
 ![mono-repo-1](Readme.assets/mono-repo-1.png)
 
-Create a file named `Jenkinsfile` under each service directory.
+Create `Jenkinsfile` under each service directory.
 
 ```bash
 .
@@ -245,7 +245,28 @@ git push --force
 
 ![mono-repo-2](Readme.assets/mono-repo-2.png)
 
+Create `Jenkinsfile` under each service directory.
 
+```bash
+.
+├── README.md
+├── bar
+│   ├── Dockerfile
+│   ├── Jenkinsfile    # ++
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go
+│   └── templates
+│       └── index.html
+└── foo
+    ├── Dockerfile
+    ├── Jenkinsfile    # ++
+    ├── go.mod
+    ├── go.sum
+    ├── main.go
+    └── templates
+        └── index.html
+```
 
  ```groovy
  pipeline {
@@ -348,7 +369,27 @@ git push --force
 
 ![mono-repo-3](Readme.assets/mono-repo-3.png)
 
+Create `Jenkinsfile` under root directory.
 
+```bash
+.
+├── Jenkinsfile # ++
+├── README.md
+├── bar
+│   ├── Dockerfile
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go
+│   └── templates
+│       └── index.html
+└── foo
+    ├── Dockerfile
+    ├── go.mod
+    ├── go.sum
+    ├── main.go
+    └── templates
+       └── index.html
+```
 
 ```groovy
 pipeline {
@@ -519,5 +560,177 @@ git push --force
 #### Monorepo#4
 
 ![mono-repo-4](Readme.assets/mono-repo-4.png)
+
+```bash
+.
+├── Jenkinsfile-auto # ++
+├── README.md
+├── bar
+│   ├── Dockerfile
+│   ├── Jenkinsfile    # ++
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go
+│   └── templates
+│       └── index.html
+├── foo
+│   ├── Dockerfile
+│   ├── Jenkinsfile    # ++
+│   ├── go.mod
+│   ├── go.sum
+│   ├── main.go
+│   └── templates
+│       └── index.html
+└── pipelineCreator.groovy # ++
+```
+
+```groovy
+pipeline {
+    agent any
+    stages{
+        stage('Create MultiBranchPipelineJob'){
+            steps{
+                script{
+                    // scan Jenkinsfile from all directories
+                    def files = findFiles(glob: '**/Jenkinsfile')
+                    def fileCount = files.size()
+                    echo "Found ${fileCount} Jenkinsfile(s)"
+                    for (int i = 0; i < files.size(); i++) {
+                        echo files[i].name
+                        def filePath = files[i].path
+                        def pathWithoutFile = filePath.replace('/Jenkinsfile', '')
+                        def jobName = "auto-gen-" + ( pathWithoutFile =~ /([^\/]+)\/?$/)[0][0]
+                        echo filePath
+                        echo jobName
+                        if(Jenkins.instance.getItemMap()[jobName] == null){
+                            echo "Job ${jobName} does not exist, creating..."
+                            // create MultiBranchPipelineJob for each directory which contains Jenkinsfile
+                            createJob(filePath, jobName)
+                        }else{
+                            echo "Job ${jobName} already exists."
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+def createJob(filePath, jobName){
+        jobDsl  targets: '*.groovy',
+        removedJobAction: 'IGNORE',
+        removedViewAction: 'IGNORE',
+        lookupStrategy: 'JENKINS_ROOT',
+        additionalParameters: [jenkinsfile: filePath, Name: jobName]
+}
+```
+
+```groovy
+// get all DSL config 
+// http://jenkins.prefix.domaion/plugin/job-dsl/api-viewer/index.html
+multibranchPipelineJob("${Name}") {
+    branchSources {
+        branchSource {
+            source {
+                github {
+                    id('github')
+                    repoOwner("KokoiRuby")
+                    configuredByUrl(false)
+                    repository("devsecops-demo-app")
+                    repositoryUrl("https://github.com/KokoiRuby/devsecops-demo-app.git")
+                    credentialsId('jenkins-github-pat')
+
+                    traits {
+                        gitHubBranchDiscovery {
+                            strategyId(1)
+                        }
+                        gitHubPullRequestDiscovery {
+                            strategyId(2)
+                        }
+                    }
+                }
+            }
+        }
+        factory {
+            workflowBranchProjectFactory {
+                scriptPath("${jenkinsfile}")
+            }
+        }
+    }
+}
+```
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jenkins demo-4 auto-gen"
+git push -u origin main
+```
+
+Create an umbralla Multibranch Pipeline to create children Pipeline.
+
+![image-20241126151715826](Readme.assets/image-20241126151715826.png)
+
+![image-20241126151856761](Readme.assets/image-20241126151856761.png)
+
+![image-20241126151913203](Readme.assets/image-20241126151913203.png)
+
+Need to approve the scripts to run
+
+![image-20241126152742926](Readme.assets/image-20241126152742926.png)
+
+![image-20241126152810456](Readme.assets/image-20241126152810456.png)
+
+![image-20241126152836150](Readme.assets/image-20241126152836150.png)
+
+![image-20241126153137889](Readme.assets/image-20241126153137889.png)
+
+![image-20241126153213836](Readme.assets/image-20241126153213836.png)
+
+![image-20241126153352464](Readme.assets/image-20241126153352464.png)
+
+![image-20241126153409387](Readme.assets/image-20241126153409387.png)
+
+Build now.
+
+![image-20241126155221529](Readme.assets/image-20241126155221529.png)
+
+
+
+![image-20241126155133040](Readme.assets/image-20241126155133040.png)
+
+Modify source `foo/templates/index.html` & `bar/templates/index.html`.
+
+```html
+<div class="version-info">v0.1.4</div>
+```
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "jenkins demo-4 auto-gen on-demand build v0.1.4"
+git push -u origin main
+```
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+#### [SonarQube](https://docs.sonarsource.com/sonarqube/latest/)
+
+It helps developers manage code quality and security continuously by providing detailed insights into codebases.
+
+![SQ instance components](https://assets-eu-01.kc-usercontent.com/de54acbd-b859-01c0-a8dc-f4339e0550f4/0fd3b035-aee8-4039-8a76-f77e93a2b11d/SQ-instance-components.png?w=924&h=451&auto=format&fit=crop)
+
+Create a project.
+
+
 
 ### HA
