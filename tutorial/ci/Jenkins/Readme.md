@@ -38,8 +38,6 @@ It **doesn't depend on a Docker daemon** and executes each command within a Dock
 
 ### Build
 
-![mono-repo-3](Readme.assets/mono-repo-3.png)
-
 ![mono-repo-4](Readme.assets/mono-repo-4.png)
 
 ### Hands-on
@@ -150,7 +148,6 @@ spec:
         }
     }
 }
-
 ```
 
 ```bash
@@ -246,19 +243,112 @@ git reset --hard <recorded_commit_hash>
 git push --force
 ```
 
-### Monorepo#2
+#### Monorepo#2
 
 ![mono-repo-2](Readme.assets/mono-repo-2.png)
 
 
 
+ ```groovy
+ pipeline {
+     agent none
+     stages {
+         stage('Build with Kaniko') {
+             when {
+                 changeset "**/bar/**"
+             }
+             agent {
+                 kubernetes {
+                     defaultContainer 'kaniko'
+                     //workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: "jenkins-workspace-pvc", readOnly: false)
+                     yaml """
+ kind: Pod
+ spec:
+   containers:
+   - name: kaniko
+     image: gcr.io/kaniko-project/executor:v1.23.2-debug
+     imagePullPolicy: Always
+     command:
+     - sleep
+     args:
+     - 99d
+     volumeMounts:
+       - name: jenkins-docker-cfg
+         mountPath: /kaniko/.docker
+   volumes:
+   - name: jenkins-docker-cfg
+     projected:
+       sources:
+       - secret:
+           name: harbor-pullsecret
+           items:
+             - key: .dockerconfigjson
+               path: config.json
+ """
+                 }
+             }
  
+             environment {
+                 HARBOR_URL     = credentials('harbor-url')
+                 IMAGE_PUSH_DESTINATION="${HARBOR_URL}/devsecops/demo-app-bar"
+                 GIT_COMMIT="${checkout (scm).GIT_COMMIT}"
+                 IMAGE_TAG = "${BRANCH_NAME}-${GIT_COMMIT}"
+                 BUILD_IMAGE="${IMAGE_PUSH_DESTINATION}:${IMAGE_TAG}"
+                 BUILD_IMAGE_LATEST="${IMAGE_PUSH_DESTINATION}:latest"
+             }
+ 
+             steps {
+                 container(name: 'kaniko', shell: '/busybox/sh') {
+                     withEnv(['PATH+EXTRA=/busybox']) {
+                         sh '''#!/busybox/sh
+                             cd bar
+                             /kaniko/executor --context `pwd` --destination $IMAGE_PUSH_DESTINATION --insecure
+                         '''
+                     }
+                 }
+             }
+         }
+     }
+ }
+ ```
 
+Add, Commit & Push
 
+```bash
+git add .
+git commit -m "jenkins demo-2 on-demand build"
+git push -u origin main
+```
 
+Modify source `foo/templates/index.html`.
 
+```html
+<div class="version-info">v0.1.1</div>
+```
 
+```bash
+git add .
+git commit -m "jenkins demo-2 on-demand build foo v0.1.1"
+git push -u origin main
+```
 
+Built & pushed successfully.
+
+![image-20241126143128939](Readme.assets/image-20241126143128939.png)
+
+![image-20241126143201027](Readme.assets/image-20241126143201027.png)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+#### Monorepo#3
+
+![mono-repo-3](Readme.assets/mono-repo-3.png)
 
 
 
