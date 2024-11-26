@@ -2,7 +2,7 @@
 
 Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software.
 
-#### [`Jenkinsfile`](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/)
+### [`Jenkinsfile`](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/)
 
 A `Jenkinsfile` is a text file that contains the definition of a Jenkins Pipeline and is checked into source control.
 
@@ -30,15 +30,13 @@ pipeline {
 }
 ```
 
-#### [Kaniko](https://github.com/GoogleContainerTools/kaniko)
+### [Kaniko](https://github.com/GoogleContainerTools/kaniko)
 
 A tool to build container images from a Dockerfile, inside a container or Kubernetes cluster.
 
 It **doesn't depend on a Docker daemon** and executes each command within a Dockerfile completely in userspace.
 
-### Build
-
-![mono-repo-4](Readme.assets/mono-repo-4.png)
+### [Plugins](https://plugins.jenkins.io/)
 
 ### Hands-on
 
@@ -323,12 +321,12 @@ git push -u origin main
 Modify source `foo/templates/index.html`.
 
 ```html
-<div class="version-info">v0.1.1</div>
+<div class="version-info">v0.1.2</div>
 ```
 
 ```bash
 git add .
-git commit -m "jenkins demo-2 on-demand build foo v0.1.1"
+git commit -m "jenkins demo-2 on-demand build foo v0.1.2"
 git push -u origin main
 ```
 
@@ -352,18 +350,174 @@ git push --force
 
 
 
+```groovy
+pipeline {
+    agent none
+    stages {
+        stage('Build with Kaniko for Foo') {
+            when {
+                changeset "**/foo/**"
+            }
+            agent {
+                kubernetes {
+                    defaultContainer 'kaniko'
+                    yaml """
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.23.2-debug
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: harbor-pullsecret
+          items:
+            - key: .dockerconfigjson
+              path: config.json
+"""
+                }
+            }
 
+            environment {
+                HARBOR_URL = credentials('harbor-url')
+                IMAGE_PUSH_DESTINATION = "${HARBOR_URL}/devsecops/demo-app-foo"
+                GIT_COMMIT = "${checkout(scm).GIT_COMMIT}"
+                IMAGE_TAG = "${BRANCH_NAME}-${GIT_COMMIT}"
+                BUILD_IMAGE = "${IMAGE_PUSH_DESTINATION}:${IMAGE_TAG}"
+                BUILD_IMAGE_LATEST = "${IMAGE_PUSH_DESTINATION}:latest"
+            }
 
+            steps {
+                container(name: 'kaniko', shell: '/busybox/sh') {
+                    withEnv(['PATH+EXTRA=/busybox']) {
+                        sh '''#!/busybox/sh
+                            cd foo
+                            /kaniko/executor --context `pwd` --destination $IMAGE_PUSH_DESTINATION --insecure
+                        '''
+                    }
+                }
+            }
+        }
 
+        stage('Build with Kaniko for Bar') {
+            when {
+                changeset "**/bar/**"
+            }
+            agent {
+                kubernetes {
+                    defaultContainer 'kaniko'
+                    yaml """
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.23.2-debug
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: harbor-pullsecret
+          items:
+            - key: .dockerconfigjson
+              path: config.json
+"""
+                }
+            }
 
-#### Practice
+            environment {
+                HARBOR_URL = credentials('harbor-url')
+                IMAGE_PUSH_DESTINATION = "${HARBOR_URL}/devsecops/demo-app-bar"
+                GIT_COMMIT = "${checkout(scm).GIT_COMMIT}"
+                IMAGE_TAG = "${BRANCH_NAME}-${GIT_COMMIT}"
+                BUILD_IMAGE = "${IMAGE_PUSH_DESTINATION}:${IMAGE_TAG}"
+                BUILD_IMAGE_LATEST = "${IMAGE_PUSH_DESTINATION}:latest"
+            }
 
-- On-demand build
-  - [`when {}`](https://www.jenkins.io/doc/book/pipeline/syntax/#when) + changeset
-  - Merge steps in `./svc-*/Jenkinsfile` into `./Jenkinsfile` = One pipeline
-  - **Best practice**: auto-generate pipeline whenever a new svc dir is added - **Need script approval** 
-    - Manage Jenkins → "In-process" Script Approval
+            steps {
+                container(name: 'kaniko', shell: '/busybox/sh') {
+                    withEnv(['PATH+EXTRA=/busybox']) {
+                        sh '''#!/busybox/sh
+                            cd bar
+                            /kaniko/executor --context `pwd` --destination $IMAGE_PUSH_DESTINATION --insecure
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
 
-#### [Plugins](https://plugins.jenkins.io/)
+```
 
-#### HA
+Create an umbralla multibranch pipeline.
+
+![image-20241126144116806](Readme.assets/image-20241126144116806.png)
+
+![image-20241126144221356](Readme.assets/image-20241126144221356.png)
+
+![image-20241126144231850](Readme.assets/image-20241126144231850.png)
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jenkins demo-3"
+git push -u origin main
+```
+
+Modify source `foo/templates/index.html` & `bar/templates/index.html`.
+
+```html
+<div class="version-info">v0.1.3</div>
+```
+
+Add, Commit & Push again
+
+```bash
+git add .
+git commit -m "jenkins demo-3 on-demand build v0.1.3"
+git push -u origin main
+```
+
+Built & pushed successfully.
+
+![image-20241126145248344](Readme.assets/image-20241126145248344.png)
+
+![image-20241126145311570](Readme.assets/image-20241126145311570.png)
+
+![image-20241126145337612](Readme.assets/image-20241126145337612.png)
+
+![image-20241126145350603](Readme.assets/image-20241126145350603.png)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+#### Monorepo#4
+
+![mono-repo-4](Readme.assets/mono-repo-4.png)
+
+### HA
