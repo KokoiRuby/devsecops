@@ -58,7 +58,7 @@ resource "local_file" "render_kaniko_docker_credentials_json" {
       "prefix" : "${var.prefix}"
       "domain" : "${var.domain}"
       "harbor_pwd" : "${var.harbor_pwd}"
-      "harbor_pwd_base64" : "${base64encode("${var.harbor_pwd}")}"
+      "harbor_pwd_base64" : "${base64encode("admin:${var.harbor_pwd}")}"
   })
 }
 

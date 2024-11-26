@@ -21,8 +21,13 @@ resource "helm_release" "jenkins" {
   depends_on = [helm_release.ingress-nginx]
 }
 
+data "kubectl_file_documents" "jenkins-sa" {
+    content = file("./helm_jenkins/serviceaccount.yaml")
+}
+
 resource "kubectl_manifest" "jenkins-sa" {
-  yaml_body = file("./helm_jenkins/serviceaccount.yaml")
+  for_each  = data.kubectl_file_documents.jenkins-sa.manifests
+  yaml_body = each.value
 
   depends_on = [helm_release.jenkins]
 }
@@ -41,6 +46,14 @@ resource "kubectl_manifest" "jenkins-github-pat" {
     "github_username" : "${var.github_username}"
     "github_pat" : "${var.github_pat}"
   })
+
+  depends_on = [helm_release.jenkins]
+}
+
+resource "null_resource" "jenkins-harbor-pullsecret" {
+  provisioner "local-exec" {
+    command = "kubectl create secret docker-registry harbor-pullsecret --docker-server=harbor.${var.prefix}.${var.domain} --docker-username=admin --docker-password=${var.harbor_pwd} -n jenkins --kubeconfig=config.yaml"
+  }
 
   depends_on = [helm_release.jenkins]
 }
