@@ -1,0 +1,88 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-demo5
+spec:
+  workspaces:
+    - name: output
+    - name: sonar-credentials
+    - name: docker-credentials
+  params:
+    # 1. checkout
+    - name: git_repo_url
+      default: "https://github.com/KokoiRuby/devsecops-demo-app.git"
+    # 2. sonarqube
+    - name: sonar_host_url
+      default: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000" # in-cluster
+    - name: sonar_proj_key
+      default: "devsecops-demo-app-foo"
+    - name: sonar_src_to_scan
+      default: "foo"
+    - name: sonar_org
+      default: "devsecops"
+    - name: sonar_scanner_image
+      default: "docker.io/sonarsource/sonar-scanner-cli:11.1"
+    # 3. kaniko build
+    - name: image_registry_url
+      default: "http://harbor.devsecops.yukanyan.us.kg"
+    - name: image_repository
+      default: "devsecops"
+    - name: service
+      default: "demo-app-foo"
+    - name: commit_id
+      default: "latest"
+    - name: dockerfile
+      default: "foo/Dockerfile"
+    - name: context
+      default: "foo"
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: output
+      params:
+        - name: url
+          value: $(params.git_repo_url)
+    - name: sonarqube-scanner
+      taskRef:
+        name: sonarqube-scanner
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: output
+        - name: sonar-credentials
+          workspace: sonar-credentials
+      params:
+        - name: SONAR_HOST_URL
+          value: $(params.sonar_host_url)
+        - name: SONAR_PROJECT_KEY
+          value: $(params.sonar_proj_key)
+        - name: SOURCE_TO_SCAN
+          value: $(params.sonar_src_to_scan)
+        - name: SONAR_ORGANIZATION
+          value: $(params.sonar_org)
+        - name: SONAR_SCANNER_IMAGE
+          value: $(params.sonar_scanner_image)
+    - name: kaniko
+      taskRef:
+        name: kaniko
+      runAfter:
+        - sonarqube-scanner
+      workspaces:
+        - name: source
+          workspace: output
+        - name: dockerconfig
+          workspace: docker-credentials
+      params:
+        - name: IMAGE
+          value: $(params.image_registry_url)/$(params.image_repository)/$(params.service):$(params.commit_id)
+        - name: DOCKERFILE
+          value: $(params.dockerfile)
+        - name: CONTEXT
+          value: $(params.context)
+        - name: EXTRA_ARGS
+          value:
+            - "--insecure"

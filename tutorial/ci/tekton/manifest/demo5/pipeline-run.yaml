@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: pipeline-run-demo5
+spec:
+  taskRunSpecs:
+    - pipelineTaskName: git-clone
+      serviceAccountName: tekton-build-bot
+  pipelineRef:
+    name: pipeline-demo5
+  params:
+    # 1. checkout
+    - name: git_repo_url
+      value: "https://github.com/KokoiRuby/devsecops-demo-app.git"
+    # 2. sonarqube
+    - name: sonar_host_url
+      value: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000" # in-cluster
+    - name: sonar_proj_key
+      value: "devsecops-demo-app-foo"
+    - name: sonar_src_to_scan
+      value: "foo"
+    - name: sonar_org
+      value: "devsecops"
+    - name: sonar_scanner_image
+      value: "docker.io/sonarsource/sonar-scanner-cli:11.1"
+    # 3. kaniko build
+    - name: image_registry_url
+      value: "harbor.devsecops.yukanyan.us.kg"
+    - name: image_repository
+      value: "devsecops"
+    - name: service
+      value: "demo-app-foo"
+    - name: commit_id
+      value: "latest"
+    - name: dockerfile
+      value: "foo/Dockerfile"
+    - name: context
+      value: "foo"
+  workspaces:
+    # - name: output
+    #   volumeClaimTemplate:
+    #     spec:
+    #       accessModes:
+    #         - ReadWriteOnce
+    #       resources:
+    #         requests:
+    #           storage: 20Mi
+    - name: output
+      persistentVolumeClaim:
+        claimName: pipeline
+      subPath: $(context.pipelineRun.uid)
+    - name: sonar-credentials
+      secret:
+        secretName: tekton-sonar-user-token
+    - name: docker-credentials
+      secret:
+        secretName: tekton-kaniko-docker-credentials

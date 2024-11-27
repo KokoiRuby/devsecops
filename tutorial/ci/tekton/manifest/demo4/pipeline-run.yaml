@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: pipeline-run-demo4
+  name: pipeline-run-demo5
 spec:
   taskRunSpecs:
     - pipelineTaskName: git-clone

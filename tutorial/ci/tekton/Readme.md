@@ -118,7 +118,9 @@ Create a pipeline-run to trigger the pipeline.
 kubectl apply -f manifest/demo3/pipeline-run.yaml
 ```
 
+![image-20241127091504441](Readme.assets/image-20241127091504441.png)
 
+![image-20241127091526094](Readme.assets/image-20241127091526094.png)
 
 #### Demo#4
 
@@ -134,6 +136,23 @@ Create a pipeline-run to trigger the pipeline.
 kubectl apply -f manifest/demo4/pipeline-run.yaml
 ```
 
-
+![image-20241127101344439](Readme.assets/image-20241127101344439.png)
 
 #### Demo#5
+
+Create a pipeline that merge git-clone, sonarqube-scanner, and kaniko build task.
+
+```bash
+kubectl apply -f manifest/demo5/pipeline.yaml
+```
+
+Create a pipeline-run to trigger the pipeline.
+
+```bash
+kubectl apply -f manifest/demo5/pipeline-run.yaml
+```
+
+![image-20241127111005834](Readme.assets/image-20241127111005834.png)
+
+#### Demo#6
+
