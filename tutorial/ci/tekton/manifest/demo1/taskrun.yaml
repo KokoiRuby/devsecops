@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: git-clone
+  name: taskrun-demo1
 spec:
   serviceAccountName: tekton-build-bot
   taskRef:

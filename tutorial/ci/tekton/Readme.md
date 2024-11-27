@@ -70,3 +70,70 @@ kubectl apply -f manifest/demo1/taskrun.yaml
 Check on Dashboard.
 
 ![image-20241126204139952](Readme.assets/image-20241126204139952.png)
+
+#### Demo#2
+
+Create sonarqube user token on Sonarqube Dashboard (see more in Jenkins tutorial).
+
+![image-20241127081701355](Readme.assets/image-20241127081701355.png)
+
+Populate token & create user token secret.
+
+```bash
+kubectl apply -f manifest/demo2/serviceaccount-sonar-user.yaml
+kubectl apply -f manifest/demo2/secret-sonar-user.yaml
+```
+
+Create pvc for workspace.
+
+```bash
+kubectl apply -f manifest/demo2/pvc-pipeline.yaml
+```
+
+Create a pipeline includes git-clone task only.
+
+```bash
+kubectl apply -f manifest/demo2/pipeline.yaml
+```
+
+Create a pipeline-run to trigger the pipeline.
+
+```bash
+kubectl apply -f manifest/demo2/pipeline-run.yaml
+```
+
+![image-20241127084905487](Readme.assets/image-20241127084905487.png)
+
+#### Demo#3
+
+Create a pipeline includes git-clone & kaniko build task.
+
+```bash
+kubectl apply -f manifest/demo3/pipeline.yaml
+```
+
+Create a pipeline-run to trigger the pipeline.
+
+```bash
+kubectl apply -f manifest/demo3/pipeline-run.yaml
+```
+
+
+
+#### Demo#4
+
+Create a pipeline includes git-clone, sonarqube-scanner, and kaniko build task.
+
+```bash
+kubectl apply -f manifest/demo4/pipeline.yaml
+```
+
+Create a pipeline-run to trigger the pipeline.
+
+```bash
+kubectl apply -f manifest/demo4/pipeline-run.yaml
+```
+
+
+
+#### Demo#5
