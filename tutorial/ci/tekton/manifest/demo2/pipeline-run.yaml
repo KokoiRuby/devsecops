@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: pipeline-run-demo2
+spec:
+  taskRunSpecs:
+    - pipelineTaskName: git-clone
+      serviceAccountName: tekton-build-bot
+  pipelineRef:
+    name: pipeline-demo2
+  params:
+    - name: git-repo-url
+      value: "https://github.com/KokoiRuby/devsecops-demo-app.git"
+  workspaces:
+    - name: output
+      persistentVolumeClaim:
+        claimName: pipeline
+      subPath: $(context.pipelineRun.uid)

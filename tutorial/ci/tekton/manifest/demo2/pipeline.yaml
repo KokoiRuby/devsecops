@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-demo2
+spec:
+  # pipeline scope
+  workspaces:
+    - name: output
+  params:
+    - name: git-repo-url
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      # reference pipeline's
+      workspaces:
+        - name: output
+          workspace: output
+      params:
+        - name: url
+          value: $(params.git-repo-url)
