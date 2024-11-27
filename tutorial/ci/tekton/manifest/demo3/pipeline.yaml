@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-demo3
+spec:
+  workspaces:
+    - name: output
+    - name: docker-credentials
+  params:
+    - name: git-repo-url
+  tasks:
+    # task 1: git-clone
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: output
+      params:
+        - name: url
+          value: $(params.git-repo-url)
+    # task 2: build image with kaniko
+    - name: kaniko
+      taskRef:
+        name: kaniko
+      # dependency
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: output
+        - name: dockerconfig
+          workspace: docker-credentials
+      params:
+        - name: IMAGE
+          value: harbor.devsecops.yukanyan.us.kg/devsecops/demo-app-foo:latest
+        - name: DOCKERFILE
+          value: foo/Dockerfile
+        - name: CONTEXT
+          value: foo
+        - name: EXTRA_ARGS
+          value:
+            - "--insecure"
