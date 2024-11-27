@@ -1,0 +1,78 @@
+name: demo4
+
+on:
+  push:
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up matrix
+        id: set-matrix
+        run: |
+          changed_dirs=()
+          for dir in */
+          do
+            dir=${dir%*/}
+            if ! git diff --quiet HEAD^ HEAD -- ./$dir
+            then
+              changed_dirs+=($dir)
+            fi
+          done
+          # output json
+          json_output="{\"path\":["
+          for (( i=0; i<${#changed_dirs[@]}; i++ ));
+          do
+              json_output+="{\"name\":\"${changed_dirs[$i]}\"}"
+              if (( i < ${#changed_dirs[@]}-1 )); then
+                  json_output+=","
+              fi
+          done
+          json_output+="]}"
+          echo "::set-output name=matrix::${json_output}"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        path: ${{fromJson(needs.prepare.outputs.matrix).path}}
+
+    env:
+      REGISTRY_URL: "harbor.devsecops.yukanyan.us.kg"
+      REGISTRY_PROJECT: "devsecops-demo-app"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Insecure Docker Repository
+        run: |
+          cat /etc/docker/daemon.json
+          sudo truncate -s-2 /etc/docker/daemon.json
+          echo ", \"insecure-registries\": [\"harbor.devsecops.yukanyan.us.kg\"]}" | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: |
+          if [ -f "./${{ matrix.path.name }}/Dockerfile" ]
+          then
+            echo "${{ secrets.HARBOR_PASSWORD }}" | docker login ${{ env.REGISTRY_URL }} -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
+            docker build -t ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_PROJECT }}/${{ matrix.path.name }}:${{ github.sha }} ./${{ matrix.path.name }}
+            docker push ${{ env.REGISTRY_URL }}/${{ env.REGISTRY_PROJECT }}/${{ matrix.path.name }}:${{ github.sha }}
+          fi

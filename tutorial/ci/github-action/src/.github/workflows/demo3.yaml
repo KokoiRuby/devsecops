@@ -1,0 +1,46 @@
+name: demo3
+
+on:
+  push:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo
+            path: foo
+          - image: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
+            path: bar
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Insecure Docker Repository
+        run: |
+          cat /etc/docker/daemon.json
+          sudo truncate -s-2 /etc/docker/daemon.json
+          echo ", \"insecure-registries\": [\"harbor.devsecops.yukanyan.us.kg\"]}" | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: harbor.devsecops.yukanyan.us.kg
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ matrix.path }}
+          file: ${{ matrix.path }}/Dockerfile
+          push: true
+          tags: ${{ matrix.image }}:${{ github.sha }}

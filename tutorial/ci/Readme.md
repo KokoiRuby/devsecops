@@ -23,3 +23,14 @@
   - Auditting
   - Observability
   - Supply-chain
+
+### Best Practice
+
+- "Main-branch development practice," with small, frequent code commits.
+- Each commit should trigger the pipeline.
+- Include building and automated testing (unit).
+- Code scan (qualitysecurity risks).
+- Coverage
+  - **Code checkout, Unit test, Build, Push, Messaging**
+  - Static code scan, E2E test, Image scan, Image signature, Configuration/DB Management, Security test
+- [Measurement](https://dora.dev/capabilities/continuous-integration/)
