@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-demo4
+spec:
+  workspaces:
+    - name: output
+    - name: docker-credentials
+    - name: sonar-credentials
+  params:
+    - name: git-repo-url
+  tasks:
+    # task 1: git-clone
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: output
+      params:
+        - name: url
+          value: $(params.git-repo-url)
+    # task 2: scan code
+    - name: sonarqube-scanner
+      taskRef:
+        name: sonarqube-scanner
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: output
+        - name: sonar-credentials
+          workspace: sonar-credentials
+      params:
+        - name: SONAR_HOST_URL
+          value: "http://sonarqube.devsecops.yukanyan.us.kg/"
+        - name: SONAR_PROJECT_KEY
+          value: devsecops-demo-app-foo
+        - name: SOURCE_TO_SCAN
+          value: foo
+        - name: SONAR_ORGANIZATION
+          value: devsecops
+        # ++, otherwise "EORROR: org/sonar/batch/bootstrapper/EnvironmentInformation has been compiled by a more recent version of the Java Runtime"
+        - name: SONAR_SCANNER_IMAGE
+          value: "docker.io/sonarsource/sonar-scanner-cli:11.1"
+    # task 3: build image with kaniko
+    - name: kaniko
+      taskRef:
+        name: kaniko
+      runAfter:
+        - sonarqube-scanner
+      workspaces:
+        - name: source
+          workspace: output
+        - name: dockerconfig
+          workspace: docker-credentials
+      params:
+        - name: IMAGE
+          value: harbor.devsecops.yukanyan.us.kg/devsecops/demo-app-foo:latest
+        - name: DOCKERFILE
+          value: foo/Dockerfile
+        - name: CONTEXT
+          value: foo
+        - name: EXTRA_ARGS
+          value:
+            - "--insecure"
