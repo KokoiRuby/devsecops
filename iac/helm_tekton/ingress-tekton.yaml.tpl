@@ -23,7 +23,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: tekton-github-event-listener
-  namespace: tekton-pipelines
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -36,6 +35,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: el-github-listener
+                name: el-github-devsecops-demo-app
                 port:
                   number: 8080

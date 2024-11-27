@@ -89,8 +89,7 @@ Note: feel free to customize any variables in `variables.tf` or/and files under 
 
 If you want to enable Harbor HTTPS. Modify `helm_harbor.tf` then un-comment `helm_cert_manager.tf` & `helm_sealed_secret.tf`.
 
-```json
-// https://goharbor.io/docs/2.0.0/install-config/harbor-ha-helm/
+```hcl
 resource "helm_release" "harbor" {
   name             = "harbor"
   repository       = "https://helm.goharbor.io"
@@ -101,7 +100,7 @@ resource "helm_release" "harbor" {
 
   values = [
     "${templatefile(
-      "./helm_harbor/https-values.yaml.tpl",   // modify to https
+      "./helm_harbor/https-values.yaml.tpl",
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"

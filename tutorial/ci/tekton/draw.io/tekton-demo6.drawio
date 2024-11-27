@@ -1,0 +1,79 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="第 1 页" id="BCCBoekBYI5Rz_YFW93R">
+    <mxGraphModel dx="2074" dy="1197" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="HlgGpDfsv6TwYngPDT2Y-4" target="Bg8Ins_MwQAxiMGtPSMe-13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HlgGpDfsv6TwYngPDT2Y-4" value="EventListener" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="352" y="245.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Bg8Ins_MwQAxiMGtPSMe-1" target="HlgGpDfsv6TwYngPDT2Y-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-1" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github" parent="1" vertex="1">
+          <mxGeometry x="164" y="238" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="311.5" y="485" width="693" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="337.5" y="516" width="198" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-4" value="Task" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="457.5" y="531" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-5" value="git-clone" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="366.5" y="525.5" width="62" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-6" value="Pipeline" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="322.5" y="486" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-7" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="560.5" y="516" width="198" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-8" value="Task" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="698.5" y="531" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-9" value="sonarqube-scanner" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="574.5" y="525.5" width="124" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-10" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="782.5" y="516" width="198" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-11" value="Task" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="902.5" y="531" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-12" value="kaniko" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="811.5" y="525.5" width="62" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Bg8Ins_MwQAxiMGtPSMe-13" target="Bg8Ins_MwQAxiMGtPSMe-19" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-13" value="TriggerTemplate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="598" y="245.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-15" value="Webhook" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="260" y="245.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-17" value="onChange" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="500" y="245.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-18" value="bindings" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="500" y="275.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Bg8Ins_MwQAxiMGtPSMe-19" target="Bg8Ins_MwQAxiMGtPSMe-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-19" value="PipelineRun" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="598" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Bg8Ins_MwQAxiMGtPSMe-22" value="rendered" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="658" y="313" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

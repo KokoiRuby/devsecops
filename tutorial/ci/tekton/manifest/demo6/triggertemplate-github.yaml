@@ -1,0 +1,51 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: github-devsecops-demo-app
+spec:
+  params:
+    - name: git_repo_url
+    - name: commit_id
+    - name: service
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: github-devsecops-demo-app-pipeline-run-
+      spec:
+        taskRunSpecs:
+          - pipelineTaskName: git-clone
+            serviceAccountName: tekton-build-bot
+        pipelineRef:
+          name: pipeline-demo5
+        workspaces:
+          # - name: output
+          #   volumeClaimTemplate:
+          #     spec:
+          #       accessModes:
+          #         - ReadWriteOnce
+          #       resources:
+          #         requests:
+          #           storage: 50Mi
+          - name: output
+            persistentVolumeClaim:
+              claimName: pipeline
+            subPath: $(context.pipelineRun.uid)
+          - name: sonar-credentials
+            secret:
+              secretName: tekton-sonar-user-token
+          - name: docker-credentials
+            secret:
+              secretName: tekton-kaniko-docker-credentials
+        # tt = from EventListener bindings
+        params:
+          - name: git_repo_url
+            value: $(tt.params.git_repo_url)
+          - name: service
+            value: $(tt.params.service)
+          - name: image_repository
+            value: "devsecops-demo-app"
+          - name: commit_id
+            value: $(tt.params.commit_id)
+          - name: image_registry_url
+            value: "harbor.devsecops.yukanyan.us.kg"

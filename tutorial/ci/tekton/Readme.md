@@ -55,6 +55,8 @@ export KUBECONFIG=../../../iac/config.yaml
 
 #### Demo#1
 
+![tekton-demo1](Readme.assets/tekton-demo1.png)
+
 Create tasks: [git-clone](https://hub.tekton.dev/tekton/task/git-clone) 👉 [sonarqube-scanner](https://hub.tekton.dev/tekton/task/sonarqube-scanner) 👉 [kaniko](https://hub.tekton.dev/tekton/task/kaniko).
 
 ```bash
@@ -72,6 +74,8 @@ Check on Dashboard.
 ![image-20241126204139952](Readme.assets/image-20241126204139952.png)
 
 #### Demo#2
+
+![tekton-demo2](Readme.assets/tekton-demo2.png)
 
 Create sonarqube user token on Sonarqube Dashboard (see more in Jenkins tutorial).
 
@@ -106,6 +110,8 @@ kubectl apply -f manifest/demo2/pipeline-run.yaml
 
 #### Demo#3
 
+![tekton-demo3](Readme.assets/tekton-demo3.png)
+
 Create a pipeline includes git-clone & kaniko build task.
 
 ```bash
@@ -124,6 +130,8 @@ kubectl apply -f manifest/demo3/pipeline-run.yaml
 
 #### Demo#4
 
+![tekton-demo4](Readme.assets/tekton-demo4.png)
+
 Create a pipeline includes git-clone, sonarqube-scanner, and kaniko build task.
 
 ```bash
@@ -140,7 +148,9 @@ kubectl apply -f manifest/demo4/pipeline-run.yaml
 
 #### Demo#5
 
-Create a pipeline that merge git-clone, sonarqube-scanner, and kaniko build task.
+![tekton-demo4](Readme.assets/tekton-demo5.png)
+
+Create a pipeline that **<u>merge</u>** git-clone, sonarqube-scanner, and kaniko build task.
 
 ```bash
 kubectl apply -f manifest/demo5/pipeline.yaml
@@ -156,3 +166,63 @@ kubectl apply -f manifest/demo5/pipeline-run.yaml
 
 #### Demo#6
 
+![tekton-demo6](Readme.assets/tekton-demo6.png)
+
+Create serviceaccount & RBAC.
+
+```bash
+kubectl apply -f manifest/demo6/serviceaccount-trigger.yaml
+```
+
+Create EventListener & TriggerTemplate.
+
+```bash
+kubectl apply -f manifest/demo6/eventlistener-github.yaml
+kubectl apply -f manifest/demo6/triggertemplate-github.yaml
+```
+
+![image-20241127151942977](Readme.assets/image-20241127151942977.png)
+
+![image-20241127151952105](Readme.assets/image-20241127151952105.png)
+
+Add tekton webhook in GitHub repository.
+
+![image-20241127142541068](Readme.assets/image-20241127142541068.png)
+
+![image-20241127151118589](Readme.assets/image-20241127151118589.png)
+
+![image-20241127151207380](Readme.assets/image-20241127151207380.png)
+
+Modify source `foo/templates/index.html` & `bar/templates/index.html`.
+
+```bash
+<div class="version-info">v0.1.6</div>
+```
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "tekton demo6"
+git push -u origin main
+```
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+Check tekton dashboard.
+
+![image-20241127153142540](Readme.assets/image-20241127153142540.png)
+
+![image-20241127153359971](Readme.assets/image-20241127153359971.png)
+
+![image-20241127153431630](Readme.assets/image-20241127153431630.png)
+
+![image-20241127153439742](Readme.assets/image-20241127153439742.png)
+
+![image-20241127153447055](Readme.assets/image-20241127153447055.png)

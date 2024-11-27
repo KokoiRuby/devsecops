@@ -26,15 +26,11 @@ spec:
     - name: image_registry_url
       default: "http://harbor.devsecops.yukanyan.us.kg"
     - name: image_repository
-      default: "devsecops"
+      default: "devsecops-demo-app"
     - name: service
-      default: "demo-app-foo"
+      default: "foo"
     - name: commit_id
       default: "latest"
-    - name: dockerfile
-      default: "foo/Dockerfile"
-    - name: context
-      default: "foo"
   tasks:
     - name: git-clone
       taskRef:
@@ -80,9 +76,9 @@ spec:
         - name: IMAGE
           value: $(params.image_registry_url)/$(params.image_repository)/$(params.service):$(params.commit_id)
         - name: DOCKERFILE
-          value: $(params.dockerfile)
+          value: $(params.service)/Dockerfile
         - name: CONTEXT
-          value: $(params.context)
+          value: $(params.service)
         - name: EXTRA_ARGS
           value:
             - "--insecure"

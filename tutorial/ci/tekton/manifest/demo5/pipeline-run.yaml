@@ -27,15 +27,11 @@ spec:
     - name: image_registry_url
       value: "harbor.devsecops.yukanyan.us.kg"
     - name: image_repository
-      value: "devsecops"
+      value: "devsecops-demo-app"
     - name: service
-      value: "demo-app-foo"
+      value: "foo"
     - name: commit_id
       value: "latest"
-    - name: dockerfile
-      value: "foo/Dockerfile"
-    - name: context
-      value: "foo"
   workspaces:
     # - name: output
     #   volumeClaimTemplate:

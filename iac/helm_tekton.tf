@@ -35,11 +35,16 @@ resource "null_resource" "install_tekton_dashboard" {
 }
 
 
-resource "kubectl_manifest" "tekton-ingress" {
-  yaml_body = templatefile("./helm_tekton/ingress-tekton.yaml.tpl", {
+data "kubectl_file_documents" "tekton-ingress" {
+  content = templatefile("./helm_tekton/ingress-tekton.yaml.tpl", {
     "prefix" : "${var.prefix}"
     "domain" : "${var.domain}"
   })
+}
+
+resource "kubectl_manifest" "tekton-ingress" {
+  for_each  = data.kubectl_file_documents.tekton-ingress.manifests
+  yaml_body = each.value
 }
 
 data "kubectl_file_documents" "tekton-github-pat" {

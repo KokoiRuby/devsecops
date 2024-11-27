@@ -1,0 +1,68 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: github-devsecops-demo-app
+spec:
+  serviceAccountName: tekton-triggers
+  triggers:
+    - name: github-push-events-trigger-devsecops-demo-app-foo
+      interceptors:
+        - ref:
+            name: github
+          params:
+            # - name: secretRef
+            #   value:
+            #     secretName: github-secret
+            #     secretKey: secretToken
+            - name: "eventTypes"
+              value:
+                - pull_request
+                - push
+            - name: "addChangedFiles"
+              value:
+                enabled: true
+        - ref:
+            name: cel
+          params:
+            - name: filter
+              value: extensions.changed_files.matches('foo/')
+      bindings:
+        - name: git_repo_url
+          value: $(body.repository.clone_url)
+        - name: commit_id
+          value: $(body.after)
+        - name: service
+          value: "foo"
+      template:
+        ref: github-devsecops-demo-app
+
+    - name: github-push-events-trigger-devsecops-demo-app-bar
+      interceptors:
+        - ref:
+            name: github
+          params:
+            # - name: secretRef
+            #   value:
+            #     secretName: github-secret
+            #     secretKey: secretToken
+            - name: "eventTypes"
+              value:
+                - pull_request
+                - push
+            - name: "addChangedFiles"
+              value:
+                enabled: true
+        - ref:
+            name: cel
+          params:
+            - name: filter
+              value: extensions.changed_files.matches('bar/')
+      bindings:
+        - name: git_repo_url
+          value: $(body.repository.clone_url)
+        - name: commit_id
+          value: $(body.after)
+        - name: service
+          value: "bar"
+      template:
+        ref: github-devsecops-demo-app
