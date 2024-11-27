@@ -1,0 +1,13 @@
+stages:
+  - build-stage
+  - test-stage
+
+build:
+  stage: build-stage
+  script:
+    - echo "build stage"
+
+test:
+  stage: test-stage
+  script:
+    - echo "test stage"
