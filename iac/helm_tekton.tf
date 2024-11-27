@@ -69,7 +69,7 @@ resource "local_file" "render_kaniko_docker_credentials_json" {
 
 resource "null_resource" "create_kaniko_docker_credentials_secret" {
   provisioner "local-exec" {
-    command = "kubectl create secret -n tekton-pipelines generic kaniko-docker-credentials --from-file=config.json=${local_file.render_kaniko_docker_credentials_json.filename} --dry-run=client -o yaml | kubectl --kubeconfig=config.yaml apply -f -"
+    command = "kubectl create secret generic tekton-kaniko-docker-credentials --from-file=config.json=${local_file.render_kaniko_docker_credentials_json.filename} --dry-run=client -o yaml | kubectl --kubeconfig=config.yaml apply -f -"
   }
 
   depends_on = [local_file.kubeconfig]

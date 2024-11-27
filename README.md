@@ -25,14 +25,18 @@ Ingress HTTPS powered by [cert-manager](https://cert-manager.io/), [Let's Encryp
 ### Limitation
 
 - Currently only Harbor supports HTTPS.
-- Let's Encrypt regulates up to 5 certificates can be issued per exact same set of hostnames every 7 days. See more in [Limit](https://letsencrypt.org/docs/rate-limits/#new-certificates-per-exact-set-of-hostnames). So please don't tear-down & re-create your pipeline frequently, or you may switch to Harbor HTTP (by default).
-- Currently it does not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
+- Let's Encrypt regulates up to 5 certificates can be issued per exact same set of hostnames every 7 days. See more in [Limit](https://letsencrypt.org/docs/rate-limits/#new-certificates-per-exact-set-of-hostnames). So please don't tear-down & re-create your pipeline frequently, or you may switch to Harbor HTTP, which is by default.
+- Currently we do not support [`terraform{}.cloud`](https://developer.hashicorp.com/terraform/language/terraform#terraform-cloud) for HCP Terraform & Terraform Enterprise.
 
 ### Deploy
 
 #### Env
 
-Host: Windows11-v23H2 + [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)-Ubuntu-22.04 + [Docker Desktop](https://www.docker.com/products/docker-desktop/) v4.28.0
+Host: 
+
+- Windows11 v23H2
+- [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) Ubuntu-22.04
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) v4.28.0
 
 #### Command line tool
 
@@ -149,7 +153,7 @@ terraform state rm "module.k3s"
 terraform destroy --auto-approve
 ```
 
-### Tutorial
+### [Tutorial](https://github.com/KokoiRuby/devsecops/tree/main/tutorial) :point_left::nerd_face:
 
 ### Q&A
 
