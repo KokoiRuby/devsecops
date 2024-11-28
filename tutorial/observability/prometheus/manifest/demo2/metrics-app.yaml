@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-metrics
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-metrics
+  template:
+    metadata:
+      labels:
+        app: prometheus-metrics
+    spec:
+      containers:
+        - name: prometheus-metrics
+          image: yukanyan/devsecops-prometheus-metrics:v0.1.1
+          ports:
+            - containerPort: 1314
+              name: web
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 1314
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        - name: curl
+          image: docker.io/curlimages/curl
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true;
+              do
+                curl http://127.0.0.1:1314/api/cart
+                sleep 2
+                curl http://127.0.0.1:1314/api/pay
+                sleep 2
+              done
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-metrics
+  labels:
+    app: prometheus-metrics
+spec:
+  selector:
+    app: prometheus-metrics
+  ports:
+    - name: web
+      port: 1314
+      targetPort: 1314
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-metrics
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    # modify prefix & domain
+    # - host: prometheus-metrics-app.prefix.domain
+    - host: prometheus-metrics-app.devsecops.yukanyan.us.kg
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-metrics
+                port:
+                  name: web

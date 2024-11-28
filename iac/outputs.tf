@@ -53,9 +53,33 @@ output "argocd_http" {
 # }
 
 output "loki_grafana_http" {
-  value = "http://grafana.${var.prefix}.${var.domain}"
+  value = "http://loki-grafana.${var.prefix}.${var.domain}"
 }
 
 # output "loki_grafana_https" {
-#   value = "https://grafana.${var.prefix}.${var.domain}"
+#   value = "https://loki-grafana.${var.prefix}.${var.domain}"
+# }
+
+output "prometheus_grafana_http" {
+  value = "http://prometheus-grafana.${var.prefix}.${var.domain}"
+}
+
+# output "prometheus_grafana_https" {
+#   value = "https://prometheus-grafana.${var.prefix}.${var.domain}"
+# }
+
+output "prometheus_http" {
+  value = "http://prometheus.${var.prefix}.${var.domain}"
+}
+
+# output "prometheus_https" {
+#   value = "https://prometheus.${var.prefix}.${var.domain}"
+# }
+
+output "prometheus_metrics_app_http" {
+  value = "http://prometheus-metrics-app.${var.prefix}.${var.domain}"
+}
+
+# output "prometheus_metrics_app_https" {
+#   value = "https://prometheus-metrics-app.${var.prefix}.${var.domain}"
 # }

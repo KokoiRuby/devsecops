@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: http-probe
+  labels:
+    release: kube-prometheus-stack
+spec:
+  prober:
+    url: prometheus-blackbox-exporter.monitoring:9115
+  module: http_2xx
+  interval: 10s
+  targets:
+    staticConfig:
+      static:
+        - https://time.geekbang.org
+        - https://www.infoq.cn

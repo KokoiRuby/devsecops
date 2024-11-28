@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-    - host: grafana.${prefix}.${domain}
+    - host: loki-grafana.${prefix}.${domain}
       http:
         paths:
           - path: /
