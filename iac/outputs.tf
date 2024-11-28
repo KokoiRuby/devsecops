@@ -10,6 +10,8 @@ output "export_kubeconfig_cmd" {
   value = "export KUBECONFIG=./config.yaml"
 }
 
+## URL
+
 output "harbor_http" {
   value = "http://harbor.${var.prefix}.${var.domain}"
 }
@@ -46,6 +48,14 @@ output "argocd_http" {
   value = "http://argocd.${var.prefix}.${var.domain}"
 }
 
-# output "sonarqube_https" {
+# output "argocd_https" {
 #   value = "https://argocd.${var.prefix}.${var.domain}"
+# }
+
+output "loki_grafana_http" {
+  value = "http://grafana.${var.prefix}.${var.domain}"
+}
+
+# output "loki_grafana_https" {
+#   value = "https://grafana.${var.prefix}.${var.domain}"
 # }

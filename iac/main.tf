@@ -15,7 +15,7 @@ module "cvm" {
   subnet_id         = module.vpc.subnet_id
   sg_id             = module.vpc.sg_id
   cpu               = 4
-  memory            = 8
+  memory            = 16
   region            = var.region
   availability_zone = var.availability-zone
   password          = var.password
@@ -46,7 +46,7 @@ module "cloudflare" {
   domain               = var.domain
   prefix               = var.prefix
   ip                   = module.cvm.public_ip
-  records              = ["harbor", "jenkins", "sonarqube", "tekton", "argocd"]
+  records              = ["harbor", "jenkins", "sonarqube", "tekton", "argocd", "grafana"]
 }
 
 ## helm & kubectl ##
