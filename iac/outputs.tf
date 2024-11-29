@@ -81,5 +81,30 @@ output "prometheus_metrics_app_http" {
 }
 
 # output "prometheus_metrics_app_https" {
-#   value = "https://prometheus-metrics-app.${var.prefix}.${var.domain}"
+#   value = "https://otlp-app-a.${var.prefix}.${var.domain}"
 # }
+
+output "otlp_app_a_http" {
+  value = "http://otlp-app-a.${var.prefix}.${var.domain}"
+}
+
+# output "otlp_app_a_https" {
+#   value = "https://otlp-app-a.${var.prefix}.${var.domain}"
+# }
+
+output "otlp_app_b_http" {
+  value = "http://otlp-app-b.${var.prefix}.${var.domain}"
+}
+
+# output "otlp_app_b_https" {
+#   value = "https://otlp-app-b.${var.prefix}.${var.domain}"
+# }
+
+output "otlp_app_c_http" {
+  value = "http://otlp-app-c.${var.prefix}.${var.domain}"
+}
+
+# output "otlp_app_c_https" {
+#   value = "https://otlp-app-c.${var.prefix}.${var.domain}"
+# }
+

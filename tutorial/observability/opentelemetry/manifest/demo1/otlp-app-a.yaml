@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otlp-app-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otlp-app-a
+  template:
+    metadata:
+      labels:
+        app: otlp-app-a
+    spec:
+      containers:
+        - name: otlp-app-a
+          image: yukanyan/devsecops-opentelemetry-tracing:v0.1.0
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          ports:
+            - containerPort: 8000
+        - name: siege
+          image: yokogawa/siege
+          command: ["/bin/sh", "-c"]
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          args:
+            - |
+              while true;
+              do
+                siege -c 2 -r 3 http://localhost:8000/chain
+                sleep 5
+              done
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otlp-app-a
+  labels:
+    app: otlp-app-a
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      name: web
+      targetPort: 8000
+  selector:
+    app: otlp-app-a
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: otlp-app-a-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    # modify prefix & domain
+    # - host: prometheus-metrics-app.prefix.domain
+    - host: otlp-app-a.devsecops.yukanyan.us.kg
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: otlp-app-a
+                port:
+                  name: web

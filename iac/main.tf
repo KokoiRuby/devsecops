@@ -46,7 +46,7 @@ module "cloudflare" {
   domain               = var.domain
   prefix               = var.prefix
   ip                   = module.cvm.public_ip
-  records              = ["harbor", "jenkins", "sonarqube", "tekton", "argocd", "loki-grafana", "prometheus-grafana", "prometheus", "prometheus-metrics-app"]
+  records              = ["harbor", "jenkins", "sonarqube", "tekton", "argocd", "loki-grafana", "prometheus-grafana", "prometheus", "prometheus-metrics-app", "otlp-app-a", "otlp-app-b", "otlp-app-c"]
 }
 
 ## helm & kubectl ##
