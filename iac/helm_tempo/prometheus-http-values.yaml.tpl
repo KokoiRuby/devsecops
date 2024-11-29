@@ -25,9 +25,8 @@ prometheus:
     hosts: 
     - prometheus.${prefix}.${domain}
   prometheusSpec:
-    # enable metrics & trace
     enableFeatures:
-      - exemplar-storage
+    - exemplar-storage
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     externalLabels:

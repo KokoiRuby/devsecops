@@ -176,4 +176,58 @@ Check trace in tempo.
 
 #### Demo#2
 
-> Logging + Metrics + Tracing dashboard
+> **Loki** <--- trace_id ---> **Tempo** <--- trace_id ---> **Prometheus**
+
+Configure **Loki** data source.
+
+![image-20241129132102573](Readme.assets/image-20241129132102573.png)
+
+Configure **Prometheus** data source. Note: you need to create a new one instead of default provisioned one.
+
+```bash
+# connection URL
+
+```
+
+![image-20241129133752228](Readme.assets/image-20241129133752228.png)
+
+![image-20241129133844774](Readme.assets/image-20241129133844774.png)
+
+Configure **Tempo** to correlate with **Loki** & **Prometheus** by tags.
+
+```bash
+# query
+histogram_quantile(0.95,sum(rate(fastapi_requests_duration_seconds_bucket{$__tags}[$__rate_interval])) by (le))
+```
+
+![image-20241129134209928](Readme.assets/image-20241129134209928.png)
+
+![image-20241129142654308](Readme.assets/image-20241129142654308.png)
+
+Verify: Loki 👉 Tempo.
+
+![image-20241129134346513](Readme.assets/image-20241129134346513.png)
+
+![image-20241129134418722](Readme.assets/image-20241129134418722.png)
+
+![image-20241129134504493](Readme.assets/image-20241129134504493.png)
+
+Verify: Prmetheus 👉 Tempo.
+
+![image-20241129142025389](Readme.assets/image-20241129142025389.png)
+
+![image-20241129142045335](Readme.assets/image-20241129142045335.png)
+
+![image-20241129142104139](Readme.assets/image-20241129142104139.png)
+
+Verify: Tempo 👉 Loki & Prometheus.
+
+![image-20241129142353615](Readme.assets/image-20241129142353615.png)
+
+![image-20241129142405843](Readme.assets/image-20241129142405843.png)
+
+Verify: Tempo 👉 Prometheus.
+
+![image-20241129143519348](Readme.assets/image-20241129143519348.png)
+
+![image-20241129143500327](Readme.assets/image-20241129143500327.png)

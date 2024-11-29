@@ -23,6 +23,9 @@ spec:
             requests:
               cpu: 50m
               memory: 50Mi
+          env:
+            - name: APP_NAME
+              value: "otlp-app-a"
           ports:
             - containerPort: 8000
         - name: siege

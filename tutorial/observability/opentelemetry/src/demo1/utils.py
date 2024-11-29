@@ -8,8 +8,8 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from prometheus_client import Gauge, Counter, Histogram, generate_latest, REGISTRY
-from prometheus_client.openmetrics.exposition import CONTENT_TYPE_LATEST
+from prometheus_client import Gauge, Counter, Histogram, REGISTRY
+from prometheus_client.openmetrics.exposition import generate_latest, CONTENT_TYPE_LATEST
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
