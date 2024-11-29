@@ -108,6 +108,13 @@ Typical
 
 [APIs & SDKs](https://opentelemetry.io/docs/languages/)
 
+| Feature                | SDK                                  | Automatic Integration                                        |
+| ---------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| Source Code            | Requires changes to source logic     | Small amount of coding, cannot be completely non-intrusive   |
+| Customization          | Better customization                 | Average level of customization, can only be achieved by overriding built-in variables |
+| Additional Tools       | No need to introduce extra launchers | Requires additional dynamic libraries or launchers, depending on the language itself |
+| Integration Difficulty | Higher integration difficulty        | Lower integration difficulty                                 |
+
 ### [Sampling](https://opentelemetry.io/docs/concepts/sampling/)
 
 1% is acceptable.
@@ -186,7 +193,7 @@ Configure **Prometheus** data source. Note: you need to create a new one instead
 
 ```bash
 # connection URL
-
+http://kube-prometheus-stack-prometheus.monitoring:9090/
 ```
 
 ![image-20241129133752228](Readme.assets/image-20241129133752228.png)
@@ -231,3 +238,36 @@ Verify: Tempo 👉 Prometheus.
 ![image-20241129143519348](Readme.assets/image-20241129143519348.png)
 
 ![image-20241129143500327](Readme.assets/image-20241129143500327.png)
+
+#### Demo#3
+
+> Zero-code instrumentation
+
+Install dependencies.
+
+```bash
+pip install -r pip install -r src/demo3/requirements.txt
+```
+
+Run locally.
+
+```bash
+python src/demo3/main.py
+```
+
+Build & push image.
+
+```bash
+docker build -t <repo_name>/<image_name>:v0.1.0 .
+docker push <repo_name>/<image_name>:v0.1.0
+```
+
+Apply demo app & ServiceMonitor to cluster. Note: update image in manifests if necessary.
+
+```bash
+kubectl apply -f manifest/demo3/
+```
+
+Check on grafana dashboard.
+
+![image-20241129151309576](Readme.assets/image-20241129151309576.png)
