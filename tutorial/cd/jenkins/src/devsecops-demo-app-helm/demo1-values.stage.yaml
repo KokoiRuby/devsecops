@@ -1,0 +1,23 @@
+env: stage
+
+host: demo-app-stage.devsecops.yukanyan.us.kg
+
+global:
+#  registryUrl: docker.io
+  registryUrl: harbor.devsecops.yukanyan.us.kg
+#  repository: yukanyan
+  repository: devsecops-demo-app
+
+foo:
+  replicaCount: 1
+  image:
+#    name: devsecops-demo-app-foo
+    name: foo
+    tag: v0.1.0
+
+bar:
+  replicaCount: 1
+  image:
+#    name: devsecops-demo-app-bar
+    name: bar
+    tag: v0.1.0

@@ -108,3 +108,26 @@ output "otlp_app_c_http" {
 #   value = "https://otlp-app-c.${var.prefix}.${var.domain}"
 # }
 
+output "demo_app_dev_http" {
+  value = "http://demo-app-dev.${var.prefix}.${var.domain}/foo http://demo-app-dev.${var.prefix}.${var.domain}/bar"
+}
+
+# output "demo_app_dev_https" {
+#   value = "https://demo-app-dev.${var.prefix}.${var.domain}/foo https://demo-app-dev.${var.prefix}.${var.domain}/bar"
+# }
+
+output "demo_app_stage_http" {
+  value = "http://demo-app-stage.${var.prefix}.${var.domain}/foo http://demo-app-stage.${var.prefix}.${var.domain}/bar"
+}
+
+# output "demo_app_stage_https" {
+#   value = "https://demo-app-stage.${var.prefix}.${var.domain}/foo https://demo-app-stage.${var.prefix}.${var.domain}/bar"
+# }
+
+output "demo_app_prod_http" {
+  value = "http://demo-app-prod.${var.prefix}.${var.domain}/foo http://demo-app-prod.${var.prefix}.${var.domain}/bar"
+}
+
+# output "demo_app_prod_https" {
+#   value = "https://demo-app-prod.${var.prefix}.${var.domain}/foo https://demo-app-prod.${var.prefix}.${var.domain}/bar"
+# }

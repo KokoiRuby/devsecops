@@ -1,0 +1,69 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: git
+    image: alpine/git
+    command:
+    - cat
+    tty: true
+  - name: yq
+    image: mikefarah/yq
+    command:
+    - cat
+    tty: true
+"""
+    }
+  }
+
+  parameters {
+    string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'The image tag')
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        container('git') {
+          withCredentials([usernamePassword(credentialsId: 'jenkins-github-pat', usernameVariable: 'username', passwordVariable: 'password')]) {  
+            checkout([$class: 'GitSCM',
+              branches: [[name: 'main']],
+              userRemoteConfigs: [[credentialsId: 'jenkins-github-pat', url: 'https://github.com/KokoiRuby/devsecops-demo-app-helm.git']]
+            ])
+          }
+        }
+      }
+    }
+
+    stage('Update values.yaml') {
+      steps {
+        container('yq') {
+          sh """
+          yq -i '.foo.image.tag="${params.IMAGE_TAG}"' values.yaml
+          yq -i '.bar.image.tag="${params.IMAGE_TAG}"' values.yaml
+          """
+        }
+      }
+    }
+
+    stage('Commit and Push') {
+      steps {
+        container('git') {
+          withCredentials([usernamePassword(credentialsId: 'github-pull-secret', usernameVariable: 'username', passwordVariable: 'password')]) {  
+            sh """
+            git config --global --add safe.directory "*"
+            git status
+            git config user.name "jenkins"
+            git config user.email "jenkins@gmail.com"
+            git commit -am "jenkins update values.yaml"
+            git push https://${username}:${password}@github.com/devops-advanced-camp/vote-helm.git HEAD:main
+            """
+          }
+        }
+      }
+    }
+  }
+}
