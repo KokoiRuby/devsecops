@@ -44,7 +44,7 @@ Update strategies:
 
   :thumbsdown: Branch management can be challenging, making it difficult to share configurations
 
-- **Multi-dir: .dev/.test/.stage** →　auto-generate [ApplicationSet](https://argo-cd.readthedocs.io/en/latest/user-guide/application-set/) = template → **Dir/[PR](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/)-as-a-Env**
+- **Multi-dir: .dev/.test/.stage** →　[ApplicationSet](https://argo-cd.readthedocs.io/en/latest/user-guide/application-set/) + [Generators](https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators/) = template → **Dir/[PR](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/)-as-a-Env**
 
   :thumbsup: Easy to maintaine & allows for sharing cross-environment conf
 
@@ -313,6 +313,7 @@ In the end, rollback & prepare for the next demo.
 
 ```bash
 kubectl delete -f manifest/demo3-application.yaml
+kubectl delete ns devsecops-demo-app-dev
 ```
 
 ```bash
@@ -368,6 +369,118 @@ docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.1.4
 
 ![image-20241201203847394](Readme.assets/image-20241201203847394.png)
 
+In the end, rollback & prepare for the next demo.
+
+```bash
+kubectl delete -f manifest/demo4-application-dev.yaml
+kubectl delete -f manifest/demo4-application-stage.yaml
+kubectl delete ns devsecops-demo-app-dev
+kubectl delete ns devsecops-demo-app-stage
+```
+
+```bash
+# rollback
+git pull -r
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
 #### demo#5
 
+> ApplicationSet - [Git Generator](https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators-Git/)
+
+Modify `foo/templates/index.html` & `bar/templates/index.html` in demo app source repo then build & push images.
+
+```html
+<div class="version-info">dev-main-v0.1.5</div>
+<div class="version-info">stage-main-v0.2.5</div>
+```
+
+```bash
+docker build -t harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:dev-main-v0.1.5 .
+docker build -t harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:dev-main-v0.1.5 .
+docker build -t harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:stage-main-v0.2.5 .
+docker build -t harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:stage-main-v0.2.5 .
+
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:dev-main-v0.1.5
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:dev-main-v0.1.5
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:stage-main-v0.2.5
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:stage-main-v0.2.5
+```
+
+Check on harboar dashboard.
+
+![image-20241201210607180](Readme.assets/image-20241201210607180.png)
+
+![image-20241201210615175](Readme.assets/image-20241201210615175.png)
+
+Create env dir in demo app helm repo directory.
+
+```bash
+mkdir -p env/{dev,stage}
+```
+
+Copy values.yaml to each env dir.
+
+![image-20241201205201059](Readme.assets/image-20241201205201059.png)
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "argocd demo5 values.yaml"
+git push -u origin main
+```
+
+Then apply argocd application set.
+
+```bash
+kubectl apply -f manifest/demo5-applicationset.yaml
+```
+
+Check on argocd dashboard.
+
+![image-20241201212336247](Readme.assets/image-20241201212336247.png)
+
+Verify URL.
+
+- http://demo-app-dev.devsecops.yukanyan.us.kg/foo
+- http://demo-app-dev.devsecops.yukanyan.us.kg/bar
+- http://demo-app-stage.devsecops.yukanyan.us.kg/foo
+- http://demo-app-stage.devsecops.yukanyan.us.kg/bar
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+kubectl delete -f manifest/demo5-applicationset.yaml
+kubectl delete ns devsecops-demo-app-auto-generator-dev
+kubectl delete ns devsecops-demo-app-auto-generator-dev
+```
+
+```bash
+# rollback
+git pull -r
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
 #### demo#6
+
+> ApplicationSet - [PR Generator](https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators-Pull-Request/)
+
+Setup GitHub Action first.
+
+
+
+Apply argocd application set.
+
+```bash
+kubectl apply -f manifest/demo6-applicationset.yaml
+```
+
+Create a branch & a PR in demo app helm repo.
+
+
+
+Check on argocd dashboard.
+

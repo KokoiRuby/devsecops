@@ -1,0 +1,17 @@
+env: dev
+
+host: demo-app-dev.devsecops.yukanyan.us.kg
+
+foo:
+  replicaCount: 1
+  image:
+#    name: docker.io/yukanyan/devsecops-demo-app-foo
+    name: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo
+    tag: dev-main-v0.1.5
+
+bar:
+  replicaCount: 1
+  image:
+#    name: docker.io/yukanyan/devsecops-demo-app-bar
+    name: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
+    tag: dev-main-v0.1.5
