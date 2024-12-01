@@ -1,0 +1,24 @@
+# https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#applications
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devsecops-demo-app-dev
+  namespace: argo-cd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/KokoiRuby/devsecops-demo-app-helm.git
+    targetRevision: HEAD
+    path: .
+    helm:
+      valueFiles:
+        - demo1-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devsecops-demo-app-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -31,19 +31,25 @@ resource "null_resource" "upload_k3s_registries" {
 
   provisioner "remote-exec" {
     inline = [
-      "mkdir -p /etc/rancher/k3s",
+      "sudo mkdir -p /etc/rancher/k3s",
     ]
   }
 
   provisioner "file" {
-    source = templatefile("helm_harbor/http-k3s-registries.yaml.tpl",
+    content = templatefile("helm_harbor/http-k3s-registries.yaml.tpl",
       {
         "prefix" : "${var.prefix}"
         "domain" : "${var.domain}"
         "harbor_pwd" : "${var.harbor_pwd}"
     })
 
-    destination = "/etc/rancher/k3s/registries.yaml"
+    destination = "/tmp/registries.yaml"
+  }
+
+  provisioner "remote-exec" {
+    inline = [ 
+        "sudo mv /tmp/registries.yaml /etc/rancher/k3s/registries.yaml"
+     ]
   }
 
   # provisioner "remote-exec" {

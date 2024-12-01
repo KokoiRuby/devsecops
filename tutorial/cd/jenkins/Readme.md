@@ -1,11 +1,5 @@
 ## Jenkins
 
-### [GitOps](https://about.gitlab.com/topics/gitops/)
-
-A continuous delivery approach that uses **Git as the single source of truth** for both infra (IaC) & app def (manifest/helm/kustomize).
-
-Check diff = current vs. desired state then drive to desired state.
-
 ### Hands-on
 
 > Demo app src  [repository](https://github.com/KokoiRuby/devsecops-demo-app)
@@ -262,14 +256,6 @@ Verify.
 
 - http://demo-app-dev.devsecops.yukanyan.us.kg/foo
 - http://demo-app-stage.devsecops.yukanyan.us.kg/foo
-
-```bash
-
-```
-
-#### Demo#2
-
-![gitops](Readme.assets/gitops.png)
 
 In the end, rollback & prepare for the next demo.
 
