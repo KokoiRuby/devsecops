@@ -36,17 +36,43 @@ Update strategies:
 - [digest](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-digest) - Update to the latest version of a given version (tag), using the tag's SHA digest
 - [name/alphabetical](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-name) - Sorts tags alphabetically and update to the one with the highest cardinality
 
-### [GitOps](https://about.gitlab.com/topics/gitops/)
+### Multi-env
 
-A continuous delivery approach that uses **Git as the single source of truth** for both infra (IaC) & app def (manifest/helm/kustomize).
+- Multi-branch: dev/test/stage
 
-Check diff = current vs. desired state then drive to desired state.
+  :thumbsup: Strong isolation and facilitates differentiated control over environments
+
+  :thumbsdown: Branch management can be challenging, making it difficult to share configurations
+
+- **Multi-dir: .dev/.test/.stage** →　auto-generate [ApplicationSet](https://argo-cd.readthedocs.io/en/latest/user-guide/application-set/) = template → **Dir/[PR](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/)-as-a-Env**
+
+  :thumbsup: Easy to maintaine & allows for sharing cross-environment conf
+
+### Multi-cluster
+
+- one ArgoCD vs. many clusters
+
+  :thumbsup: Central view, easy to maintain
+
+  :thumbsdown: Single point of failure, all cluster cred kept in one place (management cluster)
+
+- one ArgoCD per cluster
+
+  :thumbsup: Isolation btw
+
+  :thumbsdown: Duplicate instances
 
 ### Hands-on
 
 > Demo app src  [repository](https://github.com/KokoiRuby/devsecops-demo-app)
 >
 > Demo app helm [repository](https://github.com/KokoiRuby/devsecops-demo-app-helm)
+
+Configure argocd webhook in demo app helm repo.
+
+![image-20241201201301276](Readme.assets/image-20241201201301276.png)
+
+![image-20241201201315119](Readme.assets/image-20241201201315119.png)
 
 #### Demo#1
 
@@ -63,19 +89,21 @@ docker login harbor.devsecops.yukanyan.us.kg -u admin -p admin
 # tag
 docker tag <image_hash> harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.1.0
 docker tag <image_hash> harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.1.0
+docker tag <image_hash> harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.2.0
+docker tag <image_hash> harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.2.0
 ```
 
 ```bash
 # push
 docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.1.0
 docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.1.0
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.2.0
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.2.0
 ```
 
 Check on harbor dashboard.
 
-![image-20241201083658310](Readme.assets/image-20241201083658310.png)
-
-![image-20241201083713630](Readme.assets/image-20241201083713630.png)
+![image-20241201202939175](Readme.assets/image-20241201202939175.png)
 
 Go to tutorial directory & export kubeconfig env.
 
@@ -204,7 +232,7 @@ git push --force
 
 > Image updater
 
-Update interval in deployment `argocd-image-updater`.
+(Optional) Update interval in deployment `argocd-image-updater`.
 
 ```bash
 kubectl edit deploy argocd-image-updater -n argocd
@@ -295,6 +323,50 @@ git push --force
 ```
 
 #### demo#4
+
+> Multi-env
+
+![multi-env](Readme.assets/multi-env.png)
+
+Copy demo values.yaml under to demo app helm repository.
+
+![image-20241201202020516](Readme.assets/image-20241201202020516.png)
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "argocd demo4 values.yaml"
+git push -u origin main
+```
+
+Then apply argocd application.
+
+```bash
+kubectl apply -f manifest/demo4-application-dev.yaml
+kubectl apply -f manifest/demo4-application-stage.yaml
+```
+
+Check on argocd dashboard.
+![image-20241201202954073](Readme.assets/image-20241201202954073.png)
+
+Verify URL.
+
+- http://demo-app-dev.devsecops.yukanyan.us.kg/foo
+- http://demo-app-dev.devsecops.yukanyan.us.kg/bar
+- http://demo-app-stage.devsecops.yukanyan.us.kg/foo
+- http://demo-app-stage.devsecops.yukanyan.us.kg/bar
+
+Modify demo app source repo. Re-build & re-push the image to harbor.
+
+```bash
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.1.4
+docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar:v0.1.4
+```
+
+![image-20241201203826950](Readme.assets/image-20241201203826950.png)
+
+![image-20241201203847394](Readme.assets/image-20241201203847394.png)
 
 #### demo#5
 

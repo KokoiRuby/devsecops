@@ -11,7 +11,7 @@ metadata:
     argocd-image-updater.argoproj.io/foo.helm.image-tag: foo.image.tag
     argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
     # bar
-    argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^v
+    argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^v0.2.
     argocd-image-updater.argoproj.io/bar.helm.image-name: bar.image.name
     argocd-image-updater.argoproj.io/bar.helm.image-tag: bar.image.tag
     argocd-image-updater.argoproj.io/bar.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
