@@ -1,0 +1,6 @@
+data:
+  registries.conf: |
+    registries:
+    - name: Harbor for DevSecOps Demo App
+      api_url: http://harbor.devsecops.yukanyan.us.kg
+      insecure: yes

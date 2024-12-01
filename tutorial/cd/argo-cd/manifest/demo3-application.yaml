@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devsecops-demo-app-dev
+  namespace: argocd
+  # https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/
+  annotations:
+    argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^v
+    argocd-image-updater.argoproj.io/foo.helm.image-name: foo.image.name
+    argocd-image-updater.argoproj.io/foo.helm.image-tag: foo.image.tag
+    argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
+    argocd-image-updater.argoproj.io/image-list: foo=foo
+    argocd-image-updater.argoproj.io/update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: main
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/KokoiRuby/devsecops-demo-app-helm.git
+    targetRevision: HEAD
+    path: .
+    helm:
+      valueFiles:
+        - demo3-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devsecops-demo-app-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

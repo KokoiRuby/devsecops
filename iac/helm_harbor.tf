@@ -48,7 +48,9 @@ resource "null_resource" "upload_k3s_registries" {
 
   provisioner "remote-exec" {
     inline = [ 
-        "sudo mv /tmp/registries.yaml /etc/rancher/k3s/registries.yaml"
+        "sudo mv /tmp/registries.yaml /etc/rancher/k3s/registries.yaml",
+        "sudo chown root:root /etc/rancher/k3s/registries.yaml",
+        "",
      ]
   }
 

@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vote-demo-4-prod
+  namespace: argocd
+  annotations:
+    # result microservice
+    argocd-image-updater.argoproj.io/result.allow-tags: regexp:^main
+    argocd-image-updater.argoproj.io/result.helm.image-name: RESULT.IMAGE
+    argocd-image-updater.argoproj.io/result.helm.image-tag: RESULT.TAG
+    argocd-image-updater.argoproj.io/result.pull-secret: pullsecret:argocd/harbor-pull-secret
+    # vote microservice
+    argocd-image-updater.argoproj.io/vote.allow-tags: regexp:^main
+    argocd-image-updater.argoproj.io/vote.helm.image-name: VOTE.IMAGE
+    argocd-image-updater.argoproj.io/vote.helm.image-tag: VOTE.TAG
+    argocd-image-updater.argoproj.io/vote.pull-secret: pullsecret:argocd/harbor-pull-secret
+    # worker microservice
+    argocd-image-updater.argoproj.io/worker.allow-tags: regexp:^main
+    argocd-image-updater.argoproj.io/worker.helm.image-name: WORKER.IMAGE
+    argocd-image-updater.argoproj.io/worker.helm.image-tag: WORKER.TAG
+    argocd-image-updater.argoproj.io/worker.pull-secret: pullsecret:argocd/harbor-pull-secret
+    # image list
+    argocd-image-updater.argoproj.io/image-list: result=harbor.wangwei.devopscamp.us/vote/result, vote=harbor.wangwei.devopscamp.us/vote/vote, worker=harbor.wangwei.devopscamp.us/vote/worker
+    argocd-image-updater.argoproj.io/update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: main
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/devops-advanced-camp/vote-helm.git
+    targetRevision: HEAD
+    path: demo-4
+    helm:
+      valueFiles:
+        - values.prod.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vote-demo-4-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
