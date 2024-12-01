@@ -5,11 +5,18 @@ metadata:
   namespace: argocd
   # https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/
   annotations:
-    argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^v
+    # foo
+    argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^v0.1.
     argocd-image-updater.argoproj.io/foo.helm.image-name: foo.image.name
     argocd-image-updater.argoproj.io/foo.helm.image-tag: foo.image.tag
     argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
-    argocd-image-updater.argoproj.io/image-list: foo=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo
+    # bar
+    argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^v
+    argocd-image-updater.argoproj.io/bar.helm.image-name: bar.image.name
+    argocd-image-updater.argoproj.io/bar.helm.image-tag: bar.image.tag
+    argocd-image-updater.argoproj.io/bar.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
+    # image list
+    argocd-image-updater.argoproj.io/image-list: foo=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo, bar=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
     argocd-image-updater.argoproj.io/update-strategy: newest-build
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/git-branch: main
@@ -21,7 +28,7 @@ spec:
     path: .
     helm:
       valueFiles:
-        - demo3-values.yaml
+        - demo4-dev-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: devsecops-demo-app-dev

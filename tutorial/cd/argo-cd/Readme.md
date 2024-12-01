@@ -27,9 +27,14 @@ Sync [options](https://argo-cd.readthedocs.io/en/latest/user-guide/sync-options/
 
 ### Image Updater
 
-[Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/) via [annotations](https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/) - **Registry pull secret is required**. (modify `values.yaml` in app def repo won't trigger sync)
+[Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/) via [annotations](https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/) - **Registry pull secret is required**. (modify `values.yaml` in app def repo won't trigger sync).
 
-Webhook → GitHub
+Update strategies:
+
+- [semver](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-semver) - Update to the latest version of an image considering semantic versioning constraints
+- [latest/newest-build](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-latest) - Update to the most recently built image found in a registry
+- [digest](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-digest) - Update to the latest version of a given version (tag), using the tag's SHA digest
+- [name/alphabetical](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/#strategy-name) - Sorts tags alphabetically and update to the one with the highest cardinality
 
 ### [GitOps](https://about.gitlab.com/topics/gitops/)
 
@@ -202,7 +207,7 @@ git push --force
 Update interval in deployment `argocd-image-updater`.
 
 ```bash
-kubectl edit deploy argocd-image-updater -n argo-cd
+kubectl edit deploy argocd-image-updater -n argocd
 ```
 
 ```yaml
@@ -210,7 +215,7 @@ kubectl edit deploy argocd-image-updater -n argo-cd
  38       - args:
  39         - run
  40         - '--interval'  # ++
- 41         - 30s           # ++
+ 41         - 20s           # ++
  42         env:
  43         - name: APPLICATIONS_API
 ```
@@ -262,7 +267,32 @@ docker push harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo:v0.1.3
 
 Check on harbor dashboard.
 
+![image-20241201192541387](Readme.assets/image-20241201192541387.png)
 
+Check demo app helm repository.
+
+![image-20241201195717365](Readme.assets/image-20241201195717365.png)
+
+Check on argocd dashboard.
+
+![image-20241201195537183](Readme.assets/image-20241201195537183.png)
+
+Verify URL.
+
+- http://demo-app-dev.devsecops.yukanyan.us.kg/foo
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+kubectl delete -f manifest/demo3-application.yaml
+```
+
+```bash
+# rollback
+git pull -r
+git reset --hard <recorded_commit_hash>
+git push --force
+```
 
 #### demo#4
 

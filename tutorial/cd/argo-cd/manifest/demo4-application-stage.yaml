@@ -1,23 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devsecops-demo-app-dev
+  name: devsecops-demo-app-stage
   namespace: argocd
   # https://argocd-image-updater.readthedocs.io/en/stable/configuration/images/
   annotations:
     # foo
-    argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^dev
+    argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^v0.2.
     argocd-image-updater.argoproj.io/foo.helm.image-name: foo.image.name
     argocd-image-updater.argoproj.io/foo.helm.image-tag: foo.image.tag
-    argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argo-cd/argocd-image-updater-docker-credentials
+    argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
     # bar
-    argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^dev
-    argocd-image-updater.argoproj.io/bar.helm.image-name: VOTE.IMAGE
-    argocd-image-updater.argoproj.io/bar.helm.image-tag: VOTE.TAG
-    argocd-image-updater.argoproj.io/bar.pull-secret: pullsecret:argo-cd/argocd-image-updater-docker-credentials
+    argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^v
+    argocd-image-updater.argoproj.io/bar.helm.image-name: bar.image.name
+    argocd-image-updater.argoproj.io/bar.helm.image-tag: bar.image.tag
+    argocd-image-updater.argoproj.io/bar.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
     # image list
     argocd-image-updater.argoproj.io/image-list: foo=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo, bar=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
-    argocd-image-updater.argoproj.io/update-strategy: latest
+    argocd-image-updater.argoproj.io/update-strategy: newest-build
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/git-branch: main
 spec:
@@ -28,10 +28,10 @@ spec:
     path: .
     helm:
       valueFiles:
-        - values.dev.yaml
+        - demo4-stage-values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: devsecops-demo-app-dev
+    namespace: devsecops-demo-app-stage
   syncPolicy:
     automated:
       prune: true
