@@ -9,7 +9,7 @@ spec:
     - pullRequest:
         github:
           owner: KokoiRuby
-          repo: devsecops-demo-app-helm
+          repo: devsecops-demo-app
           tokenRef:
             secretName: argocd-github-pat
             key: password
@@ -25,7 +25,7 @@ spec:
         path: .
         helm:
           valueFiles:
-            - "values.yaml"
+            - "demo6-values.yaml"
           # replace tag as head commit id
           parameters:
             - name: "foo.image.tag"
@@ -34,7 +34,7 @@ spec:
               value: "{{head_sha}}"
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: "devsecops-demo-app-pr-{{number}}"
+        namespace: "devsecops-demo-app-pr-{{branch}}-{{number}}"
       syncPolicy:
         automated:
           prune: true

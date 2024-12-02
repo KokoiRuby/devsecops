@@ -468,9 +468,80 @@ git push --force
 
 > ApplicationSet - [PR Generator](https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators-Pull-Request/)
 
-Setup GitHub Action first.
+Setup GitHub Action in demo app source repo first.
 
+```bash
+mkdir -p .github/workflows
+```
 
+```yaml
+name: argocd pr applicationset
+
+on:
+  push:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo
+            path: foo
+          - image: harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
+            path: bar
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Insecure Docker Repository
+        run: |
+          cat /etc/docker/daemon.json
+          sudo truncate -s-2 /etc/docker/daemon.json
+          echo ", \"insecure-registries\": [\"harbor.devsecops.yukanyan.us.kg\"]}" | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl restart docker
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: harbor.devsecops.yukanyan.us.kg
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ matrix.path }}
+          file: ${{ matrix.path }}/Dockerfile
+          push: true
+          tags: ${{ matrix.image }}:${{ github.sha }}
+```
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "argocd demo6 github action workflow"
+git push -u origin main
+```
+
+Copy values.yaml to demo app helm repo.
+
+![image-20241202091817587](Readme.assets/image-20241202091817587.png)
+
+Add, Commit & Push.
+
+```bash
+git add .
+git commit -m "argocd demo6 values.yaml"
+git push -u origin main
+```
 
 Apply argocd application set.
 
@@ -478,9 +549,24 @@ Apply argocd application set.
 kubectl apply -f manifest/demo6-applicationset.yaml
 ```
 
-Create a branch & a PR in demo app helm repo.
+Create a branch & a PR in demo app source repo.
 
+![image-20241202085105878](Readme.assets/image-20241202085105878.png)
 
+![image-20241202090143285](Readme.assets/image-20241202090143285.png)
+
+![image-20241202090608170](Readme.assets/image-20241202090608170.png)
 
 Check on argocd dashboard.
 
+![image-20241202092611368](Readme.assets/image-20241202092611368.png)
+
+Close PR.
+
+![image-20241202092736228](Readme.assets/image-20241202092736228.png)
+
+Check on argocd dashboard.
+
+
+
+#### Demo#7
