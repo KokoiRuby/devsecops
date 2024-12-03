@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: devsecops-demo-app-multi-cluster
+  namespace: argocd
+spec:
+  generators:
+    # https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators-List/
+    - list:
+        elements:
+          - cluster: dev
+            url: "https://kubernetes.default.svc"
+          # modify
+          - cluster: stage
+            url: "https://43.128.54.251:6443"
+  template:
+    metadata:
+      name: "{{cluster}}-cluster-devsecops-demo-app"
+    spec:
+      project: "default"
+      source:
+        repoURL: "https://github.com/KokoiRuby/devsecops-demo-app-helm.git"
+        path: .
+        helm:
+          valueFiles:
+            - "demo7-{{cluster}}-values.yaml"
+      destination:
+        server: "{{url}}"
+        namespace: devsecops-demo-app-multi-cluster
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

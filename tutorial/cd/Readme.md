@@ -19,3 +19,20 @@ vs.
 ![Continuous Delivery](Readme.assets/Continuous-Delivery.png)
 
 ![Continuous Deploy](Readme.assets/Continuous-Deploy.png)
+
+### Best practice
+
+- **Separate biz src code & app def repo**
+
+  - Separate the responsibilities/concerns of development and DevOps to avoid CI trigger issues caused by merging
+
+    Clearer change logs for application definitions
+
+  - Achieve access separation for better permission control
+
+- **Dir-as-a-Env**
+
+  - Easier rollback operations
+  - Clear audit logs
+  - Easy integration of automation
+  - ApplicationSet + Generator (List/Git/PR)

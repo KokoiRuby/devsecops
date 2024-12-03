@@ -125,7 +125,7 @@ Check "Repositories" in argocd dashboard. You would see a pre-added entry which 
 You might also try argo cli.
 
 ```bash
-# loging
+# login
 argocd login argocd.devsecops.yukanyan.us.kg
 
 # list repo
@@ -567,6 +567,41 @@ Close PR.
 
 Check on argocd dashboard.
 
+![image-20241202092755106](Readme.assets/image-20241202092755106.png)
 
+In the end, rollback & prepare for the next demo.
+
+```bash
+kubectl delete -f manifest/demo6-applicationset.yaml
+```
+
+```bash
+# rollback
+git pull -r
+git reset --hard <recorded_commit_hash>
+git push --force
+```
 
 #### Demo#7
+
+> Multi-cluster
+
+Add cluster via argocd cli.
+
+```bash
+# login
+argocd login argocd.devsecops.yukanyan.us.kg
+```
+
+```bash
+# add cluster
+argocd cluster add dev --kubeconfig=config.yaml
+argocd cluster add stage --kubeconfig=config.yaml
+```
+
+Apply argocd application set.
+
+```bash
+kubectl apply -f manifest/demo7-applicationset.yaml
+```
+

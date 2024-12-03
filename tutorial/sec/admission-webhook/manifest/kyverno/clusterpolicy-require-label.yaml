@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-label
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: check-owner
+      # kind/resource to match
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      validate:
+        message: "label 'owner' is required"
+        pattern:
+          metadata:
+            labels:
+              owner: "?*"

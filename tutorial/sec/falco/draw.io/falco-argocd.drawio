@@ -1,0 +1,64 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="第 1 页" id="2TGhdvnlvVcM1quMlaA_">
+    <mxGraphModel dx="1185" dy="684" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-1" target="RuRYFFwj7SyPt5kCTcYM-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-1" value="Risky Pod" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="281" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-2" target="RuRYFFwj7SyPt5kCTcYM-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-2" value="Falco" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="529" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-3" target="RuRYFFwj7SyPt5kCTcYM-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-3" value="Falcosidekick" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="768" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-4" target="RuRYFFwj7SyPt5kCTcYM-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-4" value="Argo Events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="768" y="457" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-5" target="RuRYFFwj7SyPt5kCTcYM-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-5" value="Argo Workflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="529" y="457" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="RuRYFFwj7SyPt5kCTcYM-12" target="RuRYFFwj7SyPt5kCTcYM-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-12" value="Pod deletion&lt;br&gt;Workflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="281" y="457" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-15" value="Detect" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="431" y="310" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-16" value="Push" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="679" y="310" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-17" value="Notify" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="828" y="398.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-18" value="Trigger" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="679" y="457" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-19" value="Create" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="431" y="457" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RuRYFFwj7SyPt5kCTcYM-20" value="Delete" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="341" y="398.5" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
