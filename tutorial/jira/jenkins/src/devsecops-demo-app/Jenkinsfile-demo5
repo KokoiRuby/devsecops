@@ -1,0 +1,128 @@
+pipeline {
+    parameters {
+        string defaultValue: '', description: 'Please provide: Jira release id', name: 'RELEASE_ID', trim: true
+        string defaultValue: '', description: 'Please provide: result image tag (optional)', name: 'RESULT_IMAGE_TAG', trim: true
+        string defaultValue: '', description: 'Please provide: vote image tag (optional)', name: 'VOTE_IMAGE_TAG', trim: true
+        string defaultValue: '', description: 'Please provide: worker image tag (optional)', name: 'WORKER_IMAGE_TAG', trim: true 
+    }
+
+    agent any
+    stages {
+        stage('Modify release image tag') {
+            agent {
+                kubernetes {
+                    defaultContainer 'crane'
+                    //workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: "jenkins-workspace-pvc", readOnly: false)
+                    yaml """
+kind: Pod
+spec:
+  containers:
+  - name: crane
+    image: gcr.io/go-containerregistry/crane/debug:latest
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /root/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: regcred
+          items:
+            - key: .dockerconfigjson
+              path: config.json
+"""
+                }
+            }
+            
+            environment {
+                HARBOR_URL     = credentials('harbor-url')
+                RESULT_IMAGE="${HARBOR_URL}/vote/result"
+                VOTE_IMAGE="${HARBOR_URL}/vote/vote"
+                WORKER_IMAGE="${HARBOR_URL}/vote/worker"
+                RELEASE_ID= "${params.RELEASE_ID}"
+                RESULT_IMAGE_TAG= "${params.RESULT_IMAGE_TAG}"
+                VOTE_IMAGE_TAG= "${params.VOTE_IMAGE_TAG}"
+                WORKER_IMAGE_TAG= "${params.WORKER_IMAGE_TAG}"
+            }
+
+            steps {
+                container(name: 'crane', shell: '/busybox/sh') {
+                    sh '''#!/busybox/sh
+                        if [ -z "${RELEASE_ID}" ]; then
+                            echo "release_id is empty"
+                            exit 1
+                        fi
+
+                        if [ -n "${RESULT_IMAGE_TAG}" ]; then
+                            echo "Modify result image tag"
+                            crane tag ${RESULT_IMAGE}:${RESULT_IMAGE_TAG} prod-${RESULT_IMAGE_TAG}
+                        fi
+
+                        if [ -n "${VOTE_IMAGE_TAG}" ]; then
+                            echo "Modify vote image tag"
+                            crane tag ${VOTE_IMAGE}:${VOTE_IMAGE_TAG} prod-${VOTE_IMAGE_TAG}
+                        fi
+
+                        if [ -n "${WORKER_IMAGE_TAG}" ]; then
+                            echo "Modify worker image tag"
+                            crane tag ${WORKER_IMAGE}:${WORKER_IMAGE_TAG} prod-${WORKER_IMAGE_TAG}
+                        fi
+                    '''
+                }
+            }
+        }
+
+        stage('Trigger Jira release') {
+            agent {
+                kubernetes {
+                    defaultContainer 'curl'
+                    yaml """
+kind: Pod
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+    - name: curl
+      image: curlimages/curl
+      command:
+      - sleep
+      args:
+      - 99d
+"""
+                }
+            }
+
+            environment {
+              HARBOR_URL     = credentials('harbor-url')
+              RELEASE_ID= "${params.RELEASE_ID}"
+              JIRA_HOST_URL = "http://jira${HARBOR_URL.replaceAll('harbor','')}."
+            }
+
+            steps {
+                container(name: 'curl') {
+                    sh '''#!/bin/sh
+                        if [ -z "${RELEASE_ID}" ]; then
+                            echo "release_id is empty"
+                            exit 1
+                        fi
+        
+                        RELEASE_DATE=`date +%Y-%m-%d`
+                        BODY_DATA='{"releaseDate":"'$RELEASE_DATE'","released":"true"}'
+                        URL="${JIRA_HOST_URL}/rest/api/2/version/${RELEASE_ID}"
+                        until curl -u admin:password123 -X PUT -H "Content-Type: application/json" -d "$BODY_DATA" $URL
+                        do
+                            echo "Command failed, retrying in 2 seconds..."
+                            sleep 2
+                        done
+                    '''
+                }
+            }
+        }
+    }  
+}  

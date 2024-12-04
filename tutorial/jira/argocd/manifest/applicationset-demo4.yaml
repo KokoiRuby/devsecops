@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: devsecops-demo-app
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: dev
+            folder: dev
+          - cluster: prod
+            folder: main
+          - cluster: staging
+            folder: staging
+  template:
+    metadata:
+      name: "demo-app-{{cluster}}"
+      annotations:
+        # foo
+        argocd-image-updater.argoproj.io/foo.allow-tags: regexp:^{{cluster}}
+        argocd-image-updater.argoproj.io/foo.helm.image-name: foo.image.name
+        argocd-image-updater.argoproj.io/foo.helm.image-tag: foo.image.tag
+        argocd-image-updater.argoproj.io/foo.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
+        # bar
+        argocd-image-updater.argoproj.io/bar.allow-tags: regexp:^{{cluster}}
+        argocd-image-updater.argoproj.io/bar.helm.image-name: bar.image.name
+        argocd-image-updater.argoproj.io/bar.helm.image-tag: bar.image.tag
+        argocd-image-updater.argoproj.io/bar.pull-secret: pullsecret:argocd/argocd-image-updater-docker-credentials
+        # image list
+        argocd-image-updater.argoproj.io/image-list: foo=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/foo, bar=harbor.devsecops.yukanyan.us.kg/devsecops-demo-app/bar
+        argocd-image-updater.argoproj.io/update-strategy: newest-build
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/KokoiRuby/devsecops-demo-app-helm-argocd-pr.git
+        targetRevision: HEAD
+        path: .
+        helm:
+          valueFiles:
+            - "demo4-env/{{folder}}/values.yaml"
+      destination:
+        name: "{{cluster}}"
+        namespace: "{{cluster}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

@@ -4,7 +4,31 @@ A project management and issue tracking tool developed by Atlassian.
 
 It is widely used by software development for tracking bugs, managing projects, and facilitating agile development methodologies.
 
-### Trunk-based vs. GitFlow
+### Trunk-based Development vs. GitFlow
+
+**Trunk-based Development** (Quality < Efficiency) 👉 ApplicationSet + PR Generator
+
+:smile:
+
+- At the beginning of the project, team wants to deliver the MVP as soon as possible.
+
+- Rapid iteration: sprinting towards delivery.
+
+- Small team & most members are senior developers: trust and autonomy.
+
+  
+
+![trunk-based](Readme.assets/trunk-based.png)
+
+**Gitflow** (Quality > Efficiency) 👉 ApplicationSet  + List Generator
+
+:smile:
+
+- Open source.
+- Large team & Most members are junior developers.
+- Stable product & large team, need stric code reviews.
+
+![git-flow](Readme.assets/git-flow.png)
 
 ### Hands-on
 
@@ -108,4 +132,172 @@ git commit -a -m 'DEVSECOPS-1 #done' --allow-empty
 
 #### Demo#2
 
-> Jenkins multibranch
+> Jenkins parallel build
+
+Create a multibranch pipeline.
+
+![image-20241203202810561](Readme.assets/image-20241203202810561.png)
+
+![image-20241203202856275](Readme.assets/image-20241203202856275.png)
+
+![image-20241203203359122](Readme.assets/image-20241203203359122.png)
+
+![image-20241203203422537](Readme.assets/image-20241203203422537.png)
+
+Setup sonarqube in jenkins dashboard.
+
+![image-20241204150018158](Readme.assets/image-20241204150018158.png)
+
+Create sonar token. 
+
+![image-20241204143902191](Readme.assets/image-20241204143902191.png)
+
+Populate token & create secret.
+
+```bash
+export KUBECONFIG=./config.yaml
+kubectl apply -f helm_sonarqube/secret-sonar-token.yaml
+```
+
+Copy `Jenkinsfile-demo2` to demo app source repo.
+
+![image-20241203205012002](Readme.assets/image-20241203205012002.png)
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jira jenkins demo2"
+git push -u origin main
+```
+
+Check on jenkins dashboard.
+
+![image-20241203205650685](Readme.assets/image-20241203205650685.png)
+
+Check on harbor dashboard.
+
+![image-20241203205703846](Readme.assets/image-20241203205703846.png)
+
+#### Demo#3
+
+> PR env http://demo-app.ns.project.domain in PR commit
+
+> **Please switch to the [twin](https://github.com/KokoiRuby/devsecops-demo-app-helm-argocd-pr) helm repo in order to proceed with the following demo.**
+
+Copy values.yaml to demo app helm repo.
+
+![image-20241204105405592](Readme.assets/image-20241204105405592.png)
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jira argocd demo3"
+git push -u origin main
+```
+
+Apply application set.
+
+```bash
+export KUBECONFIG=../../iac/config.yaml
+kubectl apply -f argocd/manifest/applicationset-demo3.yaml
+```
+
+Create a dev branch in demo app source repo.
+
+![image-20241204131918079](Readme.assets/image-20241204131918079.png)
+
+![image-20241204131930486](Readme.assets/image-20241204131930486.png)
+
+Modify `foo/templates/index.html` & `foo/templates/index.html`.
+
+```html
+<div class="version-info">v0.3.3-pr</div>
+```
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jira argocd demo3"
+git push -u origin main
+```
+
+![image-20241204132548857](Readme.assets/image-20241204132548857.png)
+
+Create pull request.
+
+![image-20241204132642360](Readme.assets/image-20241204132642360.png)
+
+Check on argocd dashboard.
+
+![image-20241204133922610](Readme.assets/image-20241204133922610.png)
+
+![image-20241204133933723](Readme.assets/image-20241204133933723.png)
+
+Check pull request in demo app source repo.
+
+![image-20241204150145993](Readme.assets/image-20241204150145993.png)
+
+Verify. Note: you need to add DNS records in cloudflare and wait for a while.
+
+![image-20241204134700946](Readme.assets/image-20241204134700946.png)
+
+![image-20241204135354937](Readme.assets/image-20241204135354937.png)
+
+![image-20241204135409091](Readme.assets/image-20241204135409091.png)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+
+#### Demo#4
+
+> Multi-cluster/env
+
+Copy demo4-env folder to demo app helm repo.
+
+![image-20241204151859575](Readme.assets/image-20241204151859575.png)
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jira argocd demo4"
+git push -u origin main
+```
+
+Setup clusters in argocd dashboard. Note: modify cluster name & add another one.
+
+```bash
+# login
+argocd login argocd.devsecops.yukanyan.us.kg
+
+# add cluster
+argocd cluster add cluster.local --kubeconfig=/path/to/config.yaml
+```
+
+Apply application set.
+
+```bash
+export KUBECONFIG=../../iac/config.yaml
+kubectl apply -f argocd/manifest/applicationset-demo4.yaml
+```
+
+Check on argocd dashboard.
+
+(Skip)
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
+

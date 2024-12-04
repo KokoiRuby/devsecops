@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: devsecops-demo-app-pr
+  namespace: argocd
+spec:
+  generators:
+    # https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Generators-Pull-Request/
+    - pullRequest:
+        github:
+          owner: KokoiRuby
+          repo: devsecops-demo-app
+          tokenRef:
+            secretName: argocd-github-pat
+            key: password
+        requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: "devsecops-demo-app-pr-{{branch}}-{{number}}"
+      annotations:
+        prNumber: "{{number}}"
+        # "${project|prefix}.${domain}" could be rendered by terraform
+        prPreviewHost: "devsecops.yukanyan.us.kg"
+        githubOwner: KokoiRuby
+        githubRepo: devsecops-demo-app
+        notifications.argoproj.io/subscribe.on-sync-succeeded.github-webhook: "github-webhook"
+    spec:
+      project: default
+      source:
+        repoURL: "https://github.com/KokoiRuby/devsecops-demo-app-helm-argocd-pr.git"
+        targetRevision: HEAD
+        path: .
+        helm:
+          valueFiles:
+            - "demo3-values.yaml"
+          # replace tag as head commit id
+          parameters:
+            - name: "foo.image.tag"
+              value: "{{head_sha}}"
+            - name: "bar.image.tag"
+              value: "{{head_sha}}"
+            - name: HOST
+              value: "devsecops.yukanyan.us.kg"
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: "devsecops-demo-app-pr-{{number}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
