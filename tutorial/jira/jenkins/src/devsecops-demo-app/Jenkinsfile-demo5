@@ -1,9 +1,8 @@
 pipeline {
     parameters {
         string defaultValue: '', description: 'Please provide: Jira release id', name: 'RELEASE_ID', trim: true
-        string defaultValue: '', description: 'Please provide: result image tag (optional)', name: 'RESULT_IMAGE_TAG', trim: true
-        string defaultValue: '', description: 'Please provide: vote image tag (optional)', name: 'VOTE_IMAGE_TAG', trim: true
-        string defaultValue: '', description: 'Please provide: worker image tag (optional)', name: 'WORKER_IMAGE_TAG', trim: true 
+        string defaultValue: '', description: 'Please provide: result image tag (optional)', name: 'FOO_IMAGE_TAG', trim: true
+        string defaultValue: '', description: 'Please provide: vote image tag (optional)', name: 'BAR_IMAGE_TAG', trim: true
     }
 
     agent any
@@ -32,7 +31,7 @@ spec:
     projected:
       sources:
       - secret:
-          name: regcred
+          name: harbor-pullsecret
           items:
             - key: .dockerconfigjson
               path: config.json
@@ -42,13 +41,11 @@ spec:
             
             environment {
                 HARBOR_URL     = credentials('harbor-url')
-                RESULT_IMAGE="${HARBOR_URL}/vote/result"
-                VOTE_IMAGE="${HARBOR_URL}/vote/vote"
-                WORKER_IMAGE="${HARBOR_URL}/vote/worker"
                 RELEASE_ID= "${params.RELEASE_ID}"
-                RESULT_IMAGE_TAG= "${params.RESULT_IMAGE_TAG}"
-                VOTE_IMAGE_TAG= "${params.VOTE_IMAGE_TAG}"
-                WORKER_IMAGE_TAG= "${params.WORKER_IMAGE_TAG}"
+                FOO_IMAGE="${HARBOR_URL}/devsecops-demo-app/foo"
+                BAR_IMAGE="${HARBOR_URL}/devsecops-demo-app/bar"
+                FOO_IMAGE_TAG= "${params.FOO_IMAGE_TAG}"
+                BAR_IMAGE_TAG= "${params.BAR_IMAGE_TAG}"
             }
 
             steps {
@@ -59,14 +56,14 @@ spec:
                             exit 1
                         fi
 
-                        if [ -n "${RESULT_IMAGE_TAG}" ]; then
+                        if [ -n "${FOO_IMAGE_TAG}" ]; then
                             echo "Modify result image tag"
-                            crane tag ${RESULT_IMAGE}:${RESULT_IMAGE_TAG} prod-${RESULT_IMAGE_TAG}
+                            crane tag ${FOO_IMAGE}:${FOO_IMAGE_TAG} prod-${FOO_IMAGE_TAG}
                         fi
 
-                        if [ -n "${VOTE_IMAGE_TAG}" ]; then
+                        if [ -n "${BAR_IMAGE_TAG}" ]; then
                             echo "Modify vote image tag"
-                            crane tag ${VOTE_IMAGE}:${VOTE_IMAGE_TAG} prod-${VOTE_IMAGE_TAG}
+                            crane tag ${BAR_IMAGE}:${BAR_IMAGE_TAG} prod-${BAR_IMAGE_TAG}
                         fi
 
                         if [ -n "${WORKER_IMAGE_TAG}" ]; then
@@ -104,6 +101,7 @@ spec:
               JIRA_HOST_URL = "http://jira${HARBOR_URL.replaceAll('harbor','')}."
             }
 
+            // update jira ticket status by curl API
             steps {
                 container(name: 'curl') {
                     sh '''#!/bin/sh
@@ -115,7 +113,7 @@ spec:
                         RELEASE_DATE=`date +%Y-%m-%d`
                         BODY_DATA='{"releaseDate":"'$RELEASE_DATE'","released":"true"}'
                         URL="${JIRA_HOST_URL}/rest/api/2/version/${RELEASE_ID}"
-                        until curl -u admin:password123 -X PUT -H "Content-Type: application/json" -d "$BODY_DATA" $URL
+                        until curl -u admin:admin -X PUT -H "Content-Type: application/json" -d "$BODY_DATA" $URL
                         do
                             echo "Command failed, retrying in 2 seconds..."
                             sleep 2

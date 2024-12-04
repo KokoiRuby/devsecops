@@ -291,7 +291,7 @@ kubectl apply -f argocd/manifest/applicationset-demo4.yaml
 
 Check on argocd dashboard.
 
-(Skip)
+**(TODO)**
 
 In the end, rollback & prepare for the next demo.
 
@@ -301,3 +301,50 @@ git reset --hard <recorded_commit_hash>
 git push --force
 ```
 
+#### Demo#5
+
+> Jenkins publishes release information in Jira
+
+Copy `Jenkinsfile-demo5` to demo app source repo.
+
+![image-20241204154659683](Readme.assets/image-20241204154659683.png)
+
+Add, Commit & Push
+
+```bash
+git add .
+git commit -m "jira jenkins demo2"
+git push -u origin main
+```
+
+Create a pipeline in jenkins dashboard, and copy content of `Jenkinsfile-demo5` into.
+
+![image-20241204155730386](Readme.assets/image-20241204155730386.png)
+
+Build and cancel to resolve parameters. Then refresh the page.
+
+![image-20241204155835174](Readme.assets/image-20241204155835174.png)
+
+Create a release in jira dashboard. 
+
+**(TODO)**
+
+Move backlog issue to release.
+
+**(TODO)**
+
+Populate.
+
+![image-20241204160344277](Readme.assets/image-20241204160344277.png)
+
+Check on jira dashboard.
+
+**(TODO)**
+
+In the end, rollback & prepare for the next demo.
+
+```bash
+# rollback
+git reset --hard <recorded_commit_hash>
+git push --force
+```
