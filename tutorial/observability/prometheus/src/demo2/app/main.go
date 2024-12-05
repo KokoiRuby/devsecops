@@ -150,6 +150,7 @@ func errorHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// hpa demo1
 //func qpsTestHandler(w http.ResponseWriter, r *http.Request) {
 //	cmd := exec.Command("hey", "-c", "15", "-z", "1m", "http://localhost:1314/api/pay")
 //	out, err := cmd.Output()
@@ -159,6 +160,8 @@ func errorHandler(w http.ResponseWriter, r *http.Request) {
 //	fmt.Fprint(w, string(out))
 //}
 //
+
+// keda demo1
 //func errorTestHandler(w http.ResponseWriter, r *http.Request) {
 //	cmd := exec.Command("hey", "-c", "15", "-z", "1m", "http://localhost:1314/api/error")
 //	out, err := cmd.Output()

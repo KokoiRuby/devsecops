@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: prometheus-metrics
+spec:
+  # deployment to scale
+  scaleTargetRef:
+    name: prometheus-metrics
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  cooldownPeriod: 30 # demo only, 300 in prod
+  triggers:
+    - type: prometheus
+      name: http_requests_error_qps
+      metadata:
+        serverAddress: http://kube-prometheus-stack-prometheus.monitoring:9090
+        threshold: "0.01"
+        metricName: response_status
+        # promQL
+        query: sum(rate(response_status{service="prometheus-metrics",status="500"}[1m]))
