@@ -1,0 +1,19 @@
+rules:
+  default: false
+  # custom metrics exposed by demo app
+  custom:
+    - seriesQuery: "total_http_requests"
+      resources:
+        # specify how labels from Prometheus metrics are mapped to Kubernetes resources
+        # so that hpa could identity & query
+        overrides:
+          namespace: { resource: "namespace" }
+          pod: { resource: "pod" }
+      name:
+        matches: "^total_(.*)"
+        as: "${1}_qps"
+      # sum(rate(total_http_requests{namespace="default"}[1m])) by(pod)
+      metricsQuery: (sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>))
+
+prometheus:
+  url: http://kube-prometheus-stack-prometheus.monitoring
