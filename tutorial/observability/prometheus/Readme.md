@@ -34,9 +34,19 @@ kubernetes_sd_configs:
 - role: endpoints
 ```
 
+### Metric Types
+
+A *counter* represents a single [monotonically increasing counter](https://en.wikipedia.org/wiki/Monotonic_function) whose value can only increase or be reset to zero on restart.
+
+A *gauge*represents a single numerical value that can arbitrarily go up and down.
+
+A *histogram* (**accumulative**) samples and counts them in configurable buckets (bucket behind contains all counts of prev buckets). 
+
+a *summary* samples and calculates configurable quantiles over a sliding time window.
+
 ### [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator)
 
-It simplifies and automates the configuration of a Prometheus based monitoring stack for Kubernetes clusters by CRD.
+It simplifies and automates the configuration of a Prometheus based monitoring stack for Kubernetes clusters by **CRD**.
 
 [CRDs](https://github.com/prometheus-operator/prometheus-operator?tab=readme-ov-file#customresourcedefinitions)
 
@@ -146,6 +156,16 @@ histogram_quantile(
     - Does not support authentication and TLS configuration.
     - Does not support label selection.
 
+### [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/)
+
+It handles alerts sent by client applications such as the Prometheus server.
+
+It takes care of deduplicating, grouping, and **routing** them **to** the correct **receiver** integration such as email.
+
+ It also takes care of **silencing and inhibition** of alerts.
+
+
+
 ### Hands-on
 
 Grafana dashboard.
@@ -156,9 +176,11 @@ Grafana dashboard.
 
 #### Demo#1
 
-![prometheus-blackbox-exporter](Readme.assets/prometheus-blackbox-exporter.png)
-
 > Site-availability monitoring (black box)
+
+> Endpoint: http://blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115/probe?module=http_2xx&target=url
+
+![prometheus-blackbox-exporter](Readme.assets/prometheus-blackbox-exporter.png)
 
 Uncomment `helm_prometheus.tf` and install [blackbox-exporter](https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter).
 
@@ -202,7 +224,7 @@ Check on grafana dashboard.
 
 #### Demo#2
 
-> Expose metrics by [Golang SDK](https://prometheus.io/docs/guides/go-application/)
+> Expose metrics by [Golang SDK](https://prometheus.io/docs/guides/go-application/) (white box)
 
 Run demo app locally.
 
@@ -250,3 +272,23 @@ Check on prometheus dashboard.
 Check on grafana dashboard.
 
 ![image-20241128162937319](Readme.assets/image-20241128162937319.png)
+
+#### Demo#3
+
+> Import dashboard
+
+Apply dashboard configmap.
+
+```bash
+kubectl apply -f manifest/demo3/dashboard.yaml
+```
+
+Create dashboard on grafana dashboard.
+
+![image-20241205134601381](Readme.assets/image-20241205134601381.png)
+
+![image-20241205135113652](Readme.assets/image-20241205135113652.png)
+
+#### Demo#4
+
+> Alertmanager

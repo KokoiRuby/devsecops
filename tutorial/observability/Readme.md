@@ -4,7 +4,7 @@
 
 A measure of how well the internal state of a system can be inferred from its external outputs.
 
-Simply speaking, outputs → (internal) state.
+Simply speaking, **outputs → (internal) state**.
 
 ### History
 
@@ -107,6 +107,19 @@ I (Service: Log order event)
 
 ### Metrics
 
+Google 4 Golden Signals
+
+- **Latency**: The time it takes to process a request.
+- **Traffic**: The amount of demand on the system, often measured in requests/transactions per second (RPS/TPS) or data in bytes.
+- **Errors**： The rate of failed requests, typically measured as a percentage of total requests.
+- **Saturation**： The degree to which the system is being utilized, often represented as a percentage of capacity.
+
+Service Quality Management
+
+- SLI: **indicator** to quantify a particular aspect of service performance. For example: 4 golden signals.
+- SLO: **object** defines the level of service that should be achieved. For example: P95 should be 300ms, availability should reach 3 9's.
+- SLA: **agreement** btw a customer and a service provider that outlines the expected level of service, responsibilities, and remedies. 
+
 #### [Prometheus](https://prometheus.io/)
 
 ### Logs
@@ -175,6 +188,8 @@ It does not consider how the data will be used, stored, displayed, or alerted = 
 #### [Metrics](https://opentelemetry.io/docs/concepts/signals/metrics/)
 
 [Instrument](https://opentelemetry.io/docs/concepts/signals/metrics/#metric-instruments) for capturing the metrics.
+
+
 
 ##### [Data Model](https://opentelemetry.io/docs/specs/otel/metrics/data-model/)
 

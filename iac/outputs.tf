@@ -76,6 +76,14 @@ output "prometheus_http" {
 #   value = "https://prometheus.${var.prefix}.${var.domain}"
 # }
 
+output "alert_manager_http" {
+  value = "http://alert-manager.${var.prefix}.${var.domain}"
+}
+
+# output "alert_manager_https" {
+#   value = "https://alert-manager.${var.prefix}.${var.domain}"
+# }
+
 output "prometheus_metrics_app_http" {
   value = "http://prometheus-metrics-app.${var.prefix}.${var.domain}"
 }

@@ -27,8 +27,10 @@ prometheus:
   prometheusSpec:
     enableFeatures:
     - exemplar-storage
+    # discover *monitor in all namespaces
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
+    # extra labels
     externalLabels:
       cluster: k3s-hongkong-2
     storageSpec:
@@ -44,6 +46,10 @@ prometheus:
 
 alertmanager:
   enabled: true
+  ingress:
+    enabled: true
+    hosts:
+    - alert-manager.${prefix}.${domain}
   service:
     type: NodePort
     nodePort: 30092
@@ -57,7 +63,7 @@ alertmanager:
     route:
       group_by: ["job"]
       group_wait: 10s
-      group_interval: 1m # 5m
+      group_interval: 1m  # 5m
       repeat_interval: 1m # 12h
       receiver: "prometheusalert"
       routes:
@@ -68,7 +74,7 @@ alertmanager:
     receivers:
       - name: "null"
       - name: "prometheusalert"
-        # TODO
+        # TODO: slack - https://hooks.slack.com/services/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
         webhook_configs:
           - url: "http://prometheus-alert-center.monitoring:8080/prometheusalert?type=fs&tpl=prometheus-fs&fsurl=https://open.feishu.cn/open-apis/bot/v2/hook/735cbc74-ad11-47b4-9a92-b18636dc4b64"
     templates:

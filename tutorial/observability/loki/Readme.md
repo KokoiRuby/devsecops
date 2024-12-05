@@ -7,15 +7,16 @@ Logging selection：
   - High complexity with significant maintenance costs
   - Difficult to integrate with Grafana
   - Higher storage costs
+  - **<u>Full-text</u> indexing**
 - :thumbsup: **Loki: Loki + Promtail + Grafana**
   - Light-weighted
   - Easy to integrate with Granafa
-  - **Lower storage cost by indexing timestamp + labels.**
+  - **Lower storage cost by indexing <u>timestamp + labels</u>**
   - More efficient log processing
 
 ### Architecture
 
-![loki](Readme.assets/loki.png)
+![loki](Readme.assets/loki-1733361295061-1-1733361298005-3.png)
 
 ### Component
 
@@ -30,7 +31,7 @@ Logging selection：
 
 ### Data format
 
-- The [**index**](https://grafana.com/docs/loki/latest/get-started/architecture/#index-format) is a table of contents of where to find logs for a specific set of labels.
+- The [**index**](https://grafana.com/docs/loki/latest/get-started/architecture/#index-format) is a table of contents of where to find logs for a specific set of labels. 
 - The [**chunk**](https://grafana.com/docs/loki/latest/get-started/architecture/#chunk-format) is a container for log entries for a specific set of labels.
 
 ![Loki data format: chunks and indexes](https://grafana.com/docs/loki/latest/get-started/chunks_diagram.png)
@@ -147,7 +148,7 @@ Check the logs of pods labeled `app=loki` in the last 5 min.
 {app="loki"} |= `metrics.go`
 ```
 
-logfmt
+**logfmt** 👉 operation on keys
 
 ```bash
 # {app="loki"} |= `metrics.go` | [logfmt|JSON] | (expr on Key)
@@ -177,17 +178,17 @@ Others
 # Label formatting (renaming, modifying, or adding labels): 
 # This operation allows you to rename an existing label or modify its value.
 # For example, the following command renames the 'status' label to 'new_status':
-| label_format status=new_status
+| label_format key=new_key
 
 # Delete label expression: 
 # This operation removes the specified label from the log entries.
 # For example, the following command removes the 'status' label:
-| drop status
+| drop key
 
 # Keep label expression (only retain specified labels): 
 # This operation filters the log entries to keep only the specified labels.
 # For example, the following command retains only the 'status' label:
-| keep status
+| keep key
 ```
 
 

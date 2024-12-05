@@ -2,12 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
@@ -26,6 +27,8 @@ func (rw *ResponseWriter) WriteHeader(code int) {
 	rw.statusCode = code
 	rw.ResponseWriter.WriteHeader(code)
 }
+
+// metrics, type & labels
 
 // metric: req count
 var totalRequests = prometheus.NewCounterVec(
@@ -48,6 +51,8 @@ var httpResponseTime = prometheus.NewHistogramVec(
 	prometheus.HistogramOpts{
 		Name: "http_response_time_seconds",
 		Help: "Response time of HTTP requests",
+		// default: []float64{0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0}
+		// Buckets: []float64{0.1, 0.105, 0.11, 0.125, 0.15, 0.2},
 	},
 	[]string{"path"})
 
@@ -99,7 +104,7 @@ func init() {
 func main() {
 	router := mux.NewRouter()
 
-	// prom middleware given path & handler
+	// prom middleware given path & handler, each req will be handled by pm middleware = interceptor
 	router.Use(prometheusMiddleware)
 	router.Path("/metrics").Handler(promhttp.Handler())
 
