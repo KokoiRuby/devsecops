@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    release: kube-prometheus-stack
+  name: prometheus-metrics-qps
+spec:
+  groups:
+  - name: app_http
+    rules:
+    - expr: |
+        sum(rate(http_requests_total{job="prometheus-metrics"}[1m])) by(path) > 10
+      # longer in prod
+      for: 10s
+      alert: App QPS High Alert
+      annotations:
+        summary: Burst Traffic Alert
+        description: The QPS for the interface {{ $labels.path }} is too high, with a value of {{ $value }}
+      labels:
+        severity: critical

@@ -162,9 +162,62 @@ It handles alerts sent by client applications such as the Prometheus server.
 
 It takes care of deduplicating, grouping, and **routing** them **to** the correct **receiver** integration such as email.
 
- It also takes care of **silencing and inhibition** of alerts.
+It also takes care of **silencing and inhibition** of alerts.
 
+|                                | Grafana Alert                         | Alertmanager                                      |
+| ------------------------------ | ------------------------------------- | ------------------------------------------------- |
+| Metric Source                  | Prometheus, Loki, Other Datasources   | Prometheus                                        |
+| CRD Alert Policy Configuration | Not supported                         | Supported                                         |
+| API                            | Prometheus Query: /api/v1/query_range | Instant Query: /api/v1/query (higher performance) |
+| SaaS Support                   | Grafana Cloud                         | Cloud Alertmanager                                |
 
+![image-20241205153913586](Readme.assets/image-20241205153913586.png)
+
+#### [Concept](https://prometheus.io/docs/alerting/latest/alertmanager/)
+
+**Grouping** categorizes alerts of similar nature into a single notification.
+
+**Inhibition** is a concept of suppressing notifications for certain alerts if certain other alerts are already firing.
+
+**Silences** are a straightforward way to simply mute alerts for a given time.
+
+#### Route
+
+`<route>` defines a node in a routing tree and its children.
+
+- Match recipients based on the routing tree.
+- A recipient can be configured with multiple notifiers, allowing notifications to be sent to different channels.
+- Execute notification jobs to handle notification sending, retries, and deduplication of data.
+
+#### [Receiver](https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings)
+
+#### [HA](https://promlabs.com/blog/2023/08/31/high-availability-for-prometheus-and-alertmanager-an-overview/)
+
+```yaml
+# each PM points to a set of AMs.
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager1:9093
+	  - alertmanager2:9093
+	  - alertmanager3:9093
+```
+
+#### Production
+
+- **Alert Fatigue**
+  - Excessive alerts lead to neglect, eventually resulting in production incidents.
+- **Production Practices**
+  - Optimization of Alertmanager route parameters:
+    - **group_wait:** The duration to wait before sending alerts for a group (usually to allow for alert suppression or to collect more alerts from the same group), default is 30 seconds.
+    - **group_interval:** The time to wait before sending new alerts for the same group, default is 5 minutes.
+    - **repeat_interval:**
+  - Reasonable grouping of alert rules reduces the number of alerts and sets appropriate trigger durations.
+    - **group_by:** For example, group by namespace, cluster, or data center; grouping by instance is not recommended.
+    - **for:** 5 minutes, 10 minutes.
+  - Higher-level alert targets, such as targeting data centers instead of instance-level.
+  - Provide runbooks and dashboard links when issuing alerts for quicker resolution in annotation.
 
 ### Hands-on
 
@@ -292,3 +345,15 @@ Create dashboard on grafana dashboard.
 #### Demo#4
 
 > Alertmanager
+
+Apply prometheus rule.
+
+```bash
+kubectl apply -f manifest/demo4/prometheusrule-qps.yaml
+kubectl apply -f manifest/demo4/prometheusrule-error.yaml
+```
+
+Check on prometheus dashboard.
+
+![image-20241205155509372](Readme.assets/image-20241205155509372.png)
+

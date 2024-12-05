@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    release: kube-prometheus-stack
+  name: prometheus-metrics-http-error
+spec:
+  groups:
+    - name: app_http
+      rules:
+        # error/total > 0.01
+        - expr: |
+            sum(rate(response_status{job="prometheus-metrics",status="500"}[1m])) / sum(rate(response_status{job="week9-prometheus-app-service",status="200"}[1m])) > 0.01
+          for: 10s
+          alert: App 500 Error High Alert
+          annotations:
+            summary: High HTTP 500 Error Rate Alert
+            description: HTTP 500 error rate, with a value of {{ $value }}
+          labels:
+            severity: critical
