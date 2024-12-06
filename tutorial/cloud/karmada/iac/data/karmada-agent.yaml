@@ -1,0 +1,85 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: karmada-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: karmada-agent
+rules:
+  - apiGroups: ['*']
+    resources: ['*']
+    verbs: ['*']
+  - nonResourceURLs: ['*']
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: karmada-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: karmada-agent
+subjects:
+  - kind: ServiceAccount
+    name: karmada-agent-sa
+    namespace: karmada-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: karmada-agent-sa
+  namespace: karmada-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karmada-agent
+  namespace: karmada-system
+  labels:
+    app: karmada-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: karmada-agent
+  template:
+    metadata:
+      labels:
+        app: karmada-agent
+    spec:
+      serviceAccountName: karmada-agent-sa
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+      containers:
+        - name: karmada-agent
+          image: docker.io/karmada/karmada-agent:latest
+          command:
+            - /bin/karmada-agent
+            - --karmada-kubeconfig=/etc/kubeconfig/karmada-kubeconfig
+            - --karmada-context=karmada-apiserver
+            - --cluster-name={member_cluster_name}
+            - --cluster-api-endpoint={member_cluster_api_endpoint}
+            - --cluster-status-update-frequency=10s
+            - --health-probe-bind-address=0.0.0.0:10357
+            - --v=4
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 10357
+              scheme: HTTP
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: /etc/kubeconfig
+      volumes:
+        - name: kubeconfig
+          secret:
+            secretName: karmada-kubeconfig

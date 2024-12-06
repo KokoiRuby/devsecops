@@ -1,0 +1,25 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: nginx-weigt
+  namespace: default
+spec:
+  resourceSelectors:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: nginx
+      namespace: default
+  placement:
+    replicaScheduling:
+      replicaDivisionPreference: Weighted
+      replicaSchedulingType: Divided
+      weightPreference:
+        staticWeightList:
+          - targetCluster:
+              clusterNames:
+                - cluster-1
+            weight: 1
+          - targetCluster:
+              clusterNames:
+                - cluster-2
+            weight: 1

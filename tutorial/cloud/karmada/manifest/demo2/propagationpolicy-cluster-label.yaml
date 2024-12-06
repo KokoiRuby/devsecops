@@ -1,0 +1,16 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: nginx-label
+  namespace: default
+spec:
+  resourceSelectors:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: nginx
+      namespace: default
+  placement:
+    clusterAffinity:
+      labelSelector:
+        matchLabels:
+          location: shanghai
