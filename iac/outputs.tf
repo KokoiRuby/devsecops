@@ -10,6 +10,9 @@ output "export_kubeconfig_cmd" {
   value = "export KUBECONFIG=./config.yaml"
 }
 
+## for thanos-monitee
+
+
 ## URL
 
 output "harbor_http" {

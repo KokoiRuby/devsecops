@@ -11,7 +11,7 @@ module "cos" {
 # rm /tmp/rendered_kaniko_docker_credentials.json
 resource "local_file" "render_thanos_sidecar_cos_secret_config" {
   filename = "/tmp/render_thanos_sidecar_cos_secret_config.yaml"
-  content = templatefile("helm_thanos/1/object-store.yaml.tpl",
+  content = templatefile("helm_thanos/object-store.yaml.tpl",
     {
       "bucket_name" = module.cos.bucket_name
       "app_id"      = module.cos.app_id

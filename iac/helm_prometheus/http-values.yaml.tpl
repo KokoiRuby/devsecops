@@ -32,7 +32,7 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     # extra labels
     externalLabels:
-      cluster: k3s-hongkong-2
+      cluster: monitor
     storageSpec:
       volumeClaimTemplate:
         spec:
