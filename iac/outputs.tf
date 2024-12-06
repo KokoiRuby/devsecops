@@ -76,6 +76,14 @@ output "prometheus_http" {
 #   value = "https://prometheus.${var.prefix}.${var.domain}"
 # }
 
+output "thanos_http" {
+  value = "http://prometheus-thanos.${var.prefix}.${var.domain}"
+}
+
+# output "thanos_https" {
+#   value = "https://prometheus-thanos.${var.prefix}.${var.domain}"
+# }
+
 output "alert_manager_http" {
   value = "http://alert-manager.${var.prefix}.${var.domain}"
 }

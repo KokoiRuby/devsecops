@@ -26,7 +26,7 @@
 #   provisioner "local-exec" {
 #     command = "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml --kubeconfig=config.yaml"
 #   }
-  
+
 #   depends_on = [ null_resource.create_argocd_image_updater_docker_credentials_secret ]
 # }
 
@@ -35,7 +35,7 @@
 #   provisioner "local-exec" {
 #     command = "kubectl create configmap argocd-image-updater-config -n argocd --from-literal=registries.conf='registries:\n- name: Harbor for DevSecOps Demo App\n  prefix: harbor.devsecops.yukanyan.us.kg\n  api_url: http://harbor.${var.prefix}.${var.domain}\n  insecure: yes' --kubeconfig=config.yaml"
 #   }
-  
+
 #   depends_on = [ helm_release.argocd ]
 # }
 

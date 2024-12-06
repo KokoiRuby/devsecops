@@ -48,7 +48,7 @@ module "cloudflare" {
   ip                   = module.cvm.public_ip
   # TODO: wildcard for argocd pr - "*.demo-app"
   # ingress: {{ $.Release.Namespace }}.demo-app.{{ .Values.host.project }}.{{ .Values.host.domain }}
-  records              = ["harbor", "jenkins", "sonarqube", "tekton", "argocd", "loki-grafana", "prometheus-grafana", "prometheus", "prometheus-metrics-app", "alert-manager", "otlp-app-a", "otlp-app-b", "otlp-app-c", "demo-app-dev", "demo-app-stage", "demo-app-prod", "jira"]
+  records = ["harbor", "jenkins", "sonarqube", "tekton", "argocd", "loki-grafana", "prometheus-grafana", "prometheus", "prometheus-metrics-app","prometheus-thanos", "alert-manager", "otlp-app-a", "otlp-app-b", "otlp-app-c", "demo-app-dev", "demo-app-stage", "demo-app-prod", "jira"]
 }
 
 ## helm & kubectl ##

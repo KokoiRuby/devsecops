@@ -12,9 +12,9 @@ grafana:
       provider:
         # enable grafana dashboard edit
         allowUiUpdates: true
-  service:
-    type: NodePort
-    nodePort: 30080
+  # service:
+  #   type: NodePort
+  #   nodePort: 30080
 
 prometheus:
   ingress:
@@ -40,9 +40,36 @@ prometheus:
           resources:
             requests:
               storage: 20Gi
-  service:
-    type: NodePort
-    nodePort: 30090
+    # enable thanos sidecaar
+    thanos:
+      objectStorageConfig:
+        existingSecret:
+          name: thanos-object-storage
+          key: thanos.yaml
+  # service:
+  #   type: NodePort
+  #   nodePort: 30090
+  # thanos
+  thanosService:
+    enabled: true
+  thanosServiceMonitor:
+    enabled: true
+  # Service for external access to sidecar
+  # Enabling this creates a service to expose thanos-sidecar outside the cluster.
+  thanosServiceExternal:
+    enabled: true
+  # Ingress exposes thanos sidecar outside the cluster
+  # thanosIngress:
+  #   enabled: true
+  #   annotations:
+  #     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  #   ingressClassName: nginx
+  #   hosts:
+  #   - prometheus-thanos.${prefix}.${domain}
+  #   paths: 
+  #   - /
+  #   pathType: Prefix
+
 
 alertmanager:
   enabled: true
@@ -50,9 +77,9 @@ alertmanager:
     enabled: true
     hosts:
     - alert-manager.${prefix}.${domain}
-  service:
-    type: NodePort
-    nodePort: 30092
+  # service:
+  #   type: NodePort
+  #   nodePort: 30092
   alertmanagerSpec:
     alertmanagerConfigSelector:
       matchLabels:

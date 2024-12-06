@@ -17,10 +17,10 @@ resource "helm_release" "prometheus" {
     )}"
   ]
 
-  depends_on = [ helm_release.ingress-nginx ]
+  depends_on = [helm_release.ingress-nginx]
 }
 
-# demo1
+# prometheus demo1
 # https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter
 # resource "helm_release" "prometheus-blackbox-exporter" {
 #   name             = "prometheus-blackbox-exporter"
@@ -45,11 +45,11 @@ resource "helm_release" "prometheus" {
 # }
 
 # keda demo1
-resource "helm_release" "keda" {
-  name             = "keda"
-  repository       = "https://kedacore.github.io/charts"
-  chart            = "keda"
-  namespace        = "keda"
-  version          = "v2.16.0"
-  create_namespace = true
-}
+# resource "helm_release" "keda" {
+#   name             = "keda"
+#   repository       = "https://kedacore.github.io/charts"
+#   chart            = "keda"
+#   namespace        = "keda"
+#   version          = "v2.16.0"
+#   create_namespace = true
+# }
