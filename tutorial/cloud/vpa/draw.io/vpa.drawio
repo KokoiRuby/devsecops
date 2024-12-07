@@ -1,0 +1,67 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.1 Chrome/128.0.6613.186 Electron/32.2.6 Safari/537.36" version="25.0.1">
+  <diagram name="第 1 页" id="4Mc2_uG3k5xtNS9vuHsq">
+    <mxGraphModel dx="1185" dy="684" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-1" value="VPA CRD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="260" y="376" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-2" target="D_fApbe2GOj1c4nwuOhp-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-2" target="D_fApbe2GOj1c4nwuOhp-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-2" value="VPA&lt;br&gt;Updater" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="474" y="258" width="156" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-3" target="D_fApbe2GOj1c4nwuOhp-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-3" target="D_fApbe2GOj1c4nwuOhp-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-3" target="D_fApbe2GOj1c4nwuOhp-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-3" value="VPA &lt;br&gt;Admission Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="478" y="376" width="156" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-4" target="D_fApbe2GOj1c4nwuOhp-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-4" value="VPA&lt;br&gt;Recommender" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="474" y="517" width="156" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-7" value="Pod" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="716" y="376" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="D_fApbe2GOj1c4nwuOhp-8" target="D_fApbe2GOj1c4nwuOhp-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-8" value="Deployment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="716" y="517" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-14" value="1. Read config from&lt;br&gt;2. Calculate recommended value based on metrics from metrics-server &amp;amp; set to CRD" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="179" y="577" width="467.5" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-17" value="3. Read recommended value from" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="271" y="258" width="203" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-20" value="4. Terminate" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="630" y="258" width="128" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-21" value="5. Trigger pod re-creation" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="776" y="462" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-25" value="6. Intercept API call in Admission" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="485" y="459" width="191" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="D_fApbe2GOj1c4nwuOhp-26" value="7. Mutate" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="642" y="376" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

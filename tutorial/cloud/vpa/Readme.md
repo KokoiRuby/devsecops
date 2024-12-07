@@ -7,7 +7,9 @@ UC:
 - Cloud-based dev env: compile code in the cloud and dynamically adjust Pod resource quotas to prevent OOM.
 - Meeting the high CPU and memory requirements of the Java process during startup.
 
+![vpa](Readme.assets/vpa.png)
 
+:cry: [VPA does not support in-place update](https://github.com/kubernetes/autoscaler/issues/4016) as updater will kill the pod & rely on admission controller to mutate.
 
 ### [QoS](https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/)
 
@@ -59,4 +61,26 @@ kubectl edit pod in-place
 #### Demo#2
 
 > VPA
+
+[Install](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/docs/installation.md) vpa.
+
+Deploy vpa & demo app.
+
+```bash
+kubectl apply -f ../../vpa/manifest/demo2/hamster.yaml
+```
+
+Check.
+
+```bash
+kubectl get vpa
+```
+
+Check pod requests & limists cpu & mem.
+
+```bash
+kubectl get po -l app=hamster | grep -A 3 "resources"
+```
+
+
 
