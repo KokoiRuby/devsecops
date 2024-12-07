@@ -1,0 +1,48 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.1 Chrome/128.0.6613.186 Electron/32.2.6 Safari/537.36" version="25.0.1">
+  <diagram name="第 1 页" id="fdFBz_obi3BGhCadKZ4n">
+    <mxGraphModel dx="2074" dy="1197" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="612.5" y="197" width="233" height="242" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-2" value="Container&lt;br&gt;(Pending)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="651" y="278" width="156" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-3" value="Init Containers&lt;br&gt;(restore-wait)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="651" y="358" width="156" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="fSaFQ8DJHG5MJb827Ert-7" target="fSaFQ8DJHG5MJb827Ert-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="fSaFQ8DJHG5MJb827Ert-7" target="fSaFQ8DJHG5MJb827Ert-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-7" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=pvc" vertex="1" parent="1">
+          <mxGeometry x="447" y="363" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-8" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;kubernetesLabel=1;prIcon=pod" vertex="1" parent="1">
+          <mxGeometry x="704" y="211" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-11" value="1. Mount" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="529" y="358" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="fSaFQ8DJHG5MJb827Ert-3" target="fSaFQ8DJHG5MJb827Ert-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="729" y="472" />
+              <mxPoint x="472" y="472" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-13" value="2. Wait for restore" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="516" y="443" width="112" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fSaFQ8DJHG5MJb827Ert-16" value="3. Mount" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="525" y="278" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
