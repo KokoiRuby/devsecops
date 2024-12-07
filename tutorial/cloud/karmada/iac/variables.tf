@@ -24,6 +24,14 @@ variable "password" {
 }
 
 # k3s
-variable "server_name" { 
+variable "server_name" {
   default = "k3s"
+}
+
+variable "pod_cidr" {
+  default = ""
+}
+
+variable "service_cidr" {
+  default = ""
 }

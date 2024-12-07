@@ -1,0 +1,23 @@
+apiVersion: autoscaling.karmada.io/v1alpha1
+kind: FederatedHPA
+metadata:
+  name: nginx
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx
+  minReplicas: 1
+  maxReplicas: 10
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 10
+    scaleUp:
+      stabilizationWindowSeconds: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 10

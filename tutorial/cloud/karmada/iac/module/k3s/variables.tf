@@ -17,3 +17,11 @@ variable "user" {
 variable "password" {
   default = ""
 }
+
+variable "pod_cidr" {
+  default = ""
+}
+
+variable "service_cidr" {
+  default = ""
+}

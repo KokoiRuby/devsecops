@@ -21,15 +21,19 @@ module "cvm" {
   password          = var.password
 }
 
+# pod & service cidr must be different in order to make submarine work
 module "k3s" {
   source      = "./module/k3s"
   server_name = "karmada"
 
-  public_ip   = module.cvm.public_ip
-  private_ip  = module.cvm.private_ip
-  password    = var.password
+  public_ip  = module.cvm.public_ip
+  private_ip = module.cvm.private_ip
+  password   = var.password
 
-  depends_on  = [module.cvm]
+  # pod_cidr     = var.pod_cidr
+  # service_cidr = var.service_cidr
+
+  depends_on = [module.cvm]
 }
 
 resource "local_file" "kubeconfig" {
@@ -52,15 +56,19 @@ module "cvm1" {
   password          = var.password
 }
 
+# pod & service cidr must be different in order to make submarine work
 module "k3s1" {
   source      = "./module/k3s"
   server_name = "cluster-1"
 
-  public_ip   = module.cvm1.public_ip
-  private_ip  = module.cvm1.private_ip
-  password    = var.password
+  public_ip  = module.cvm1.public_ip
+  private_ip = module.cvm1.private_ip
+  password   = var.password
 
-  depends_on  = [module.cvm1]
+  # pod_cidr     = var.pod_cidr
+  # service_cidr = var.service_cidr
+
+  depends_on = [module.cvm1]
 }
 
 resource "local_file" "kubeconfig1" {
@@ -83,15 +91,19 @@ module "cvm2" {
   password          = var.password
 }
 
+# pod & service cidr must be different in order to make submarine work
 module "k3s2" {
   source      = "./module/k3s"
-   server_name = "cluster-2"
+  server_name = "cluster-2"
 
-  public_ip   = module.cvm2.public_ip
-  private_ip  = module.cvm2.private_ip
-  password    = var.password
+  public_ip  = module.cvm2.public_ip
+  private_ip = module.cvm2.private_ip
+  password   = var.password
 
-  depends_on  = [module.cvm2]
+  # pod_cidr     = var.pod_cidr
+  # service_cidr = var.service_cidr
+
+  depends_on = [module.cvm2]
 }
 
 resource "local_file" "kubeconfig2" {

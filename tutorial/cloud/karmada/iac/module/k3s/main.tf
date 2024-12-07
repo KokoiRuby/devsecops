@@ -1,6 +1,12 @@
 module "k3s" {
   source      = "xunleii/k3s/module"
   k3s_version = "v1.31.2+k3s1"
+  
+  # cidr = {
+  #   pods = var.pod_cidr
+  #   services = service_cidr
+  # }
+  
   generate_ca_certificates = true
   global_flags = [
     "--tls-san ${var.public_ip}",

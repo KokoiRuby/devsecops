@@ -15,6 +15,10 @@ A Kubernetes management system that enables you to run your cloud-native applica
 
 ![Architecture](https://github.com/karmada-io/karmada/raw/master/docs/images/architecture.png)
 
+### Integration with ArgoCD
+
+
+
 ### Hands-on
 
 #### Demo#1
@@ -123,5 +127,46 @@ karmadactl get deploy
 karmadactl get pod --operation-scope=members -l app=nginx
 ```
 
+#### Demo#3
 
+> HPA
 
+> Note: you need to go through submarine tutorial first.
+
+Install karmada-metrics-adapter in karmada cluster.
+
+```bash
+../manifest/demo3/deploy-metrics-adapter.sh ./config.yaml cluster.local \
+	./data/karmada-apiserver.config karmada-apiserver
+```
+
+Deploy demo app.
+
+```bash
+export KUBECONFIG=./data/karmada-apiserver.config && kubectl apply -f ../manifest/demo3/app.yaml
+```
+
+Deploy FederatedHPA CRD.
+
+```bash
+kubectl apply -f ../manifest/demo3/federatedHPA.yaml
+```
+
+Check.
+
+```bash
+kubectl get fhpa
+```
+
+Export demo app in from cluster-1 then import into cluster-2.
+
+```bash
+kubectl apply -f ../manifest/demo3/service-export.yaml
+kubectl apply -f ../manifest/demo3/service-import.yaml
+```
+
+#### Demo#4
+
+> [Ingress](https://karmada.io/docs/userguide/service/multi-cluster-ingress/)
+
+(TODO)

@@ -1,0 +1,19 @@
+apiVersion: multicluster.x-k8s.io/v1alpha1
+kind: ServiceExport
+metadata:
+  name: nginx-service
+---
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: serve-export-policy
+spec:
+  resourceSelectors:
+    - apiVersion: multicluster.x-k8s.io/v1alpha1
+      kind: ServiceExport
+      name: nginx-service
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - cluster-1
+        - cluster-2
