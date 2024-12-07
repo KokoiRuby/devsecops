@@ -14,7 +14,8 @@ module "k3s" {
     "--disable=traefik",
     "--kube-controller-manager-arg bind-address=0.0.0.0",
     "--kube-proxy-arg metrics-bind-address=0.0.0.0",
-    "--kube-scheduler-arg bind-address=0.0.0.0"
+    "--kube-scheduler-arg bind-address=0.0.0.0",
+    "--kube-apiserver-arg feature-gates=InPlacePodVerticalScaling=true"
   ]
   k3s_install_env_vars = {}
 

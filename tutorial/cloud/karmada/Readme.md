@@ -1,6 +1,18 @@
 ## [karmada](https://karmada.io/docs/)
 
-A Kubernetes management system that enables you to run your cloud-native applications across multiple Kubernetes clusters and clouds。
+A Kubernetes management system that enables you to run your cloud-native applications across multiple Kubernetes clusters and clouds.
+
+:smile:
+
+1. **Cluster-Level HA**
+   - Mo single point of failure
+   - Dual-active in the same city
+   - Two sites with three centers
+   - Disaster recovery in different locations
+   - Cluster-Level Automatic Fault Migration
+2. **Private + Public Cloud**
+   - WWorkloads can be scheduled to the public cloud through cross-cluster HPA (Horizontal Pod Autoscaler) hen the capacity of the private cloud is insufficient.
+3. **Hybrid Cloud**: Avoid vendor lock-in, with billing-based scheduling strategies.
 
 ### Architecture
 
@@ -17,7 +29,8 @@ A Kubernetes management system that enables you to run your cloud-native applica
 
 ### Integration with ArgoCD
 
-
+1. Add karmada cluster into ArgoCD
+2. Create ArgoCD application together with PropagationPolicy CRD.
 
 ### Hands-on
 
@@ -168,5 +181,11 @@ kubectl apply -f ../manifest/demo3/service-import.yaml
 #### Demo#4
 
 > [Ingress](https://karmada.io/docs/userguide/service/multi-cluster-ingress/)
+
+(TODO)
+
+#### Demo#5
+
+> [ArgoCD](https://karmada.io/docs/userguide/cicd/working-with-argocd)
 
 (TODO)
