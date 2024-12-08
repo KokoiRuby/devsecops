@@ -1,0 +1,82 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: canary-analysis-demo
+spec:
+  replicas: 5
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: canary-analysis-demo
+  strategy:
+    canary:
+      # https://argoproj.github.io/argo-rollouts/features/analysis/#inline-analysis
+      analysis:
+        templates:
+          - templateName: success-rate
+        startingStep: 2
+        args:
+          - name: ingress
+            value: canary-analysis-demo
+      canaryService: canary-analysis-demo-preview
+      stableService: canary-analysis-demo
+      trafficRouting:
+        nginx:
+          stableIngress: canary-analysis-demo
+          additionalIngressAnnotations:
+            canary-by-header: "X-location"
+            canary-by-header-value: "shenzhen"
+      steps:
+        - setWeight: 40
+        - pause:
+            duration: 50
+        - setWeight: 60
+        - pause:
+            duration: 20
+        - setWeight: 80
+        - pause:
+            duration: 20
+  template:
+    metadata:
+      labels:
+        app: canary-analysis-demo
+    spec:
+      containers:
+        - image: argoproj/rollouts-demo:blue
+          imagePullPolicy: Always
+          name: canary-analysis-demo
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-analysis-demo-preview
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: canary-analysis-demo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-analysis-demo
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: canary-analysis-demo

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-analysis-demo
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: canary.analysis.dev.demo
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: canary-analysis-demo
+                port:
+                  name: http

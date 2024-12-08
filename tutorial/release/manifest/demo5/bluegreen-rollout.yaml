@@ -1,0 +1,67 @@
+# 从 Deployment 修改而来，apiversion 修改为 argoproj.io/v1alpha1，Kind 修改为 Rollout，然后增加 strategy 字段即可
+apiVersion: argoproj.io/v1alpha1
+# simply replace Deployment to Rollout
+kind: Rollout
+metadata:
+  name: bluegreen-demo
+  labels:
+    app: bluegreen-demo
+spec:
+  replicas: 3
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: bluegreen-demo
+  template:
+    metadata:
+      labels:
+        app: bluegreen-demo
+    spec:
+      containers:
+        - name: bluegreen-demo
+          image: argoproj/rollouts-demo:blue
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 5m
+  # ++
+  strategy:
+    blueGreen:
+      autoPromotionEnabled: false
+      activeService: bluegreen-demo
+      previewService: bluegreen-demo-preview
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluegreen-demo
+  labels:
+    app: bluegreen-demo
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: bluegreen-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluegreen-demo-preview
+  labels:
+    app: bluegreen-demo
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: bluegreen-demo

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-ingress-canary
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "20"
+    nginx.ingress.kubernetes.io/canary-by-header: "X-location"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "shanghai"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "canary.demo"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: canary-service
+                port:
+                  number: 80
