@@ -1,6 +1,6 @@
 ## DevSecOps
 
-A "one-click-to-start" CI/CD pipeline powered by [Terraform](https://www.terraform.io/) & [Tecent Cloud](https://cloud.tencent.com/?mobile&lang=en).
+A "quickstart" tutorial environment powered by [Terraform](https://www.terraform.io/) & [Tecent Cloud](https://cloud.tencent.com/?mobile&lang=en) which helps you build & learn CI/CD pipeline quickly.
 
 :smile: **This project is in progress, we would appreciate your precious ideas & suggestions to make it better.**
 
